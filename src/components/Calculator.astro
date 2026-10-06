@@ -1,0 +1,45 @@
+---
+import { settings } from '../lib/site';
+const config = { rates: settings.rates, cove: settings.coveRatePerFt };
+---
+<form class="calc" data-calc data-config={JSON.stringify(config)} onsubmit="return false">
+  <div class="row-2">
+    <label>Room length (ft)<input type="number" name="len" min="1" max="1000" value="12" inputmode="decimal" /></label>
+    <label>Room width (ft)<input type="number" name="wid" min="1" max="1000" value="10" inputmode="decimal" /></label>
+  </div>
+  <label>Material
+    <select name="mat">
+      {settings.rates.map((r, i) => <option value={i}>{r.material} (₹{r.min}–{r.max}/sq ft)</option>)}
+    </select>
+  </label>
+  <label class="check"><input type="checkbox" name="cove" checked /> Add cove LED lighting around the room</label>
+  <div class="calc__result" aria-live="polite">
+    <span>Estimated budget</span>
+    <strong data-out>—</strong>
+    <small data-area></small>
+  </div>
+  <a href="/contact/" class="btn btn--block">Get an exact quote</a>
+  <p class="form__hint">Indicative estimate including material and labour. Final price is confirmed after a free site visit.</p>
+</form>
+
+<script>
+  const inr = (n: number) => '₹' + Math.round(n).toLocaleString('en-IN');
+  document.querySelectorAll<HTMLFormElement>('[data-calc]').forEach((form) => {
+    const cfg = JSON.parse(form.dataset.config || '{}') as { rates: { min: number; max: number }[]; cove: number };
+    const out = form.querySelector<HTMLElement>('[data-out]')!;
+    const areaEl = form.querySelector<HTMLElement>('[data-area]')!;
+    const update = () => {
+      const len = parseFloat((form.elements.namedItem('len') as HTMLInputElement).value);
+      const wid = parseFloat((form.elements.namedItem('wid') as HTMLInputElement).value);
+      const rate = cfg.rates[+(form.elements.namedItem('mat') as HTMLSelectElement).value];
+      const cove = (form.elements.namedItem('cove') as HTMLInputElement).checked;
+      if (!(len > 0 && wid > 0) || !rate) { out.textContent = '—'; areaEl.textContent = 'Enter room size'; return; }
+      const area = len * wid;
+      const extra = cove ? 2 * (len + wid) * cfg.cove : 0;
+      out.textContent = `${inr(area * rate.min + extra)} – ${inr(area * rate.max + extra)}`;
+      areaEl.textContent = `${Math.round(area)} sq ft` + (cove ? ` + ${Math.round(2 * (len + wid))} ft cove lighting` : '');
+    };
+    form.addEventListener('input', update);
+    update();
+  });
+</script>

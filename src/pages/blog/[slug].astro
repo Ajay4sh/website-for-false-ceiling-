@@ -1,0 +1,38 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { settings, absUrl } from '../../lib/site';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', (p) => !p.data.draft);
+  return posts.map((p) => ({ params: { slug: p.id }, props: { post: p } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const d = post.data;
+const crumbs = [{ name: 'Blog', href: '/blog/' }, { name: d.title, href: `/blog/${post.id}/` }];
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: d.title,
+  description: d.description,
+  datePublished: d.date.toISOString(),
+  author: { '@type': 'Organization', name: settings.businessName },
+  publisher: { '@id': absUrl('/#business', Astro.site) },
+  mainEntityOfPage: absUrl(`/blog/${post.id}/`, Astro.site),
+  ...(d.image ? { image: absUrl(d.image, Astro.site) } : {}),
+};
+---
+<Base title={d.title} description={d.description} image={d.image} crumbs={crumbs} schema={[articleSchema]} type="article">
+  <PageHero title={d.title} text={d.date.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })} crumbs={crumbs} />
+  <section class="section">
+    <article class="container container--narrow prose">
+      {d.image && <img src={d.image} alt={d.title} width="1200" height="675" />}
+      <Content />
+    </article>
+  </section>
+  <CtaBand />
+</Base>

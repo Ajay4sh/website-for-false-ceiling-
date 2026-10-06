@@ -1,0 +1,50 @@
+---
+import { getCollection } from 'astro:content';
+import { settings, phoneHref, mailHref, waHref } from '../lib/site';
+const services = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
+const social = Object.entries(settings.social).filter(([, url]) => url);
+const labels: Record<string, string> = { facebook: 'Facebook', instagram: 'Instagram', youtube: 'YouTube', googleBusiness: 'Google' };
+---
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div>
+        <a href="/" class="logo"><span class="logo__mark" aria-hidden="true"></span><span>{settings.businessName}</span></a>
+        <p>{settings.tagline} in {settings.city}. Free site visit and transparent per-sq-ft pricing.</p>
+        {social.length > 0 && (
+          <div class="social">
+            {social.map(([k, url]) => <a href={url} target="_blank" rel="noopener">{labels[k] ?? k}</a>)}
+          </div>
+        )}
+      </div>
+      <div>
+        <h3>Services</h3>
+        <ul>{services.map((s) => <li><a href={`/services/${s.id}/`}>{s.data.title}</a></li>)}</ul>
+      </div>
+      <div>
+        <h3>Company</h3>
+        <ul>
+          <li><a href="/designs/">Designs</a></li>
+          <li><a href="/cost-calculator/">Cost Calculator</a></li>
+          <li><a href="/about/">About Us</a></li>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/contact/">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Contact</h3>
+        <ul>
+          <li><a href={phoneHref}>{settings.phone}</a></li>
+          <li><a href={waHref()} target="_blank" rel="noopener">WhatsApp</a></li>
+          <li><a href={mailHref}>{settings.email}</a></li>
+          <li>{settings.address}</li>
+          <li>{settings.hours}</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p>© {new Date().getFullYear()} {settings.businessName}. All rights reserved.</p>
+      <p>Serving {settings.areasServed.join(', ')}</p>
+    </div>
+  </div>
+</footer>

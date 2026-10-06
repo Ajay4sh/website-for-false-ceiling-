@@ -1,0 +1,74 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Art from '../../components/Art.astro';
+import ServiceCards from '../../components/ServiceCards.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { settings, phoneHref, waHref, absUrl } from '../../lib/site';
+
+export async function getStaticPaths() {
+  const services = await getCollection('services');
+  return services.map((s) => ({ params: { slug: s.id }, props: { service: s } }));
+}
+
+const { service } = Astro.props;
+const { Content } = await render(service);
+const d = service.data;
+const crumbs = [{ name: 'Services', href: '/services/' }, { name: d.title, href: `/services/${service.id}/` }];
+const rate = settings.rates.find((r) => r.material.toLowerCase().startsWith(d.title.split(/[ /&]/)[0].toLowerCase()));
+const serviceSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: d.title,
+  description: d.seoDescription ?? d.summary,
+  serviceType: d.title,
+  areaServed: settings.areasServed,
+  provider: { '@id': absUrl('/#business', Astro.site) },
+};
+---
+<Base
+  title={`${d.seoTitle ?? d.title} in ${settings.city}`}
+  description={d.seoDescription ?? d.summary}
+  image={d.image}
+  crumbs={crumbs}
+  schema={[serviceSchema]}
+>
+  <PageHero title={`${d.title} in ${settings.city}`} text={d.summary} crumbs={crumbs} />
+  <section class="section">
+    <div class="container detail">
+      <article>
+        <div class="detail__media"><Art image={d.image} art={d.art} alt={`${d.title} design`} eager /></div>
+        <div class="prose"><Content /></div>
+      </article>
+      <aside class="aside">
+        {rate && (
+          <div class="aside__box">
+            <h3>Indicative price</h3>
+            <p><strong style="font-size:1.4rem;color:var(--ink)">₹{rate.min}–{rate.max}</strong> per sq ft</p>
+            <a href="/cost-calculator/" class="btn btn--outline btn--block btn--small">Estimate my room</a>
+          </div>
+        )}
+        {d.benefits.length > 0 && (
+          <div class="aside__box"><h3>Key benefits</h3><ul class="ticks">{d.benefits.map((b) => <li>{b}</li>)}</ul></div>
+        )}
+        {d.idealFor.length > 0 && (
+          <div class="aside__box"><h3>Ideal for</h3><ul class="ticks">{d.idealFor.map((b) => <li>{b}</li>)}</ul></div>
+        )}
+        <div class="aside__box aside__box--dark">
+          <h3>Free site visit</h3>
+          <p>We measure, advise and give you a clear written quote.</p>
+          <a href={phoneHref} class="btn btn--block">Call {settings.phone}</a>
+          <a href={waHref(`Hi ${settings.businessName}, I'd like a quote for a ${d.title}.`)} class="btn btn--wa btn--block" target="_blank" rel="noopener">WhatsApp</a>
+        </div>
+      </aside>
+    </div>
+  </section>
+  <section class="section section--alt">
+    <div class="container">
+      <header class="section__head"><h2>Other services</h2></header>
+      <ServiceCards exclude={service.id} limit={3} />
+    </div>
+  </section>
+  <CtaBand title={`Get a quote for your ${d.title.toLowerCase()}`} />
+</Base>

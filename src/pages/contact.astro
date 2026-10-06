@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import ContactForm from '../components/ContactForm.astro';
+import { settings, phoneHref, mailHref, waHref } from '../lib/site';
+const crumbs = [{ name: 'Contact', href: '/contact/' }];
+---
+<Base
+  title={`Contact Us – Free Site Visit in ${settings.city}`}
+  description={`Call, WhatsApp or message ${settings.businessName} for a free false ceiling site visit and quote in ${settings.city}.`}
+  crumbs={crumbs}
+>
+  <PageHero title="Book your free site visit" text="Tell us about your space and we'll get back to you quickly." crumbs={crumbs} />
+  <section class="section section--alt">
+    <div class="container contact">
+      <div>
+        <h2>Get in touch</h2>
+        <p>Call or WhatsApp us, or fill in the form. We'll arrange a convenient time to visit.</p>
+        <ul class="contact__list">
+          <li><span class="ic">📞</span><div><small>Phone</small><a href={phoneHref}>{settings.phone}</a></div></li>
+          <li><span class="ic">💬</span><div><small>WhatsApp</small><a href={waHref()} target="_blank" rel="noopener">Chat with us</a></div></li>
+          <li><span class="ic">✉️</span><div><small>Email</small><a href={mailHref}>{settings.email}</a></div></li>
+          <li><span class="ic">📍</span><div><small>Address</small>{settings.address}</div></li>
+          <li><span class="ic">🕘</span><div><small>Hours</small>{settings.hours}</div></li>
+        </ul>
+        {settings.mapEmbedUrl && (
+          <div class="map"><iframe src={settings.mapEmbedUrl} title={`Map to ${settings.businessName}`} loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+        )}
+      </div>
+      <ContactForm />
+    </div>
+  </section>
+</Base>

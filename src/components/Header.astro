@@ -1,0 +1,29 @@
+---
+import { settings } from '../lib/site';
+const path = Astro.url.pathname;
+const links = [
+  { href: '/services/', label: 'Services' },
+  { href: '/designs/', label: 'Designs' },
+  { href: '/cost-calculator/', label: 'Cost Calculator' },
+  { href: '/about/', label: 'About' },
+  { href: '/blog/', label: 'Blog' },
+];
+---
+<header class="header">
+  <div class="container header__inner">
+    <a href="/" class="logo">
+      {settings.logo
+        ? <img src={settings.logo} alt={settings.businessName} width="160" height="40" />
+        : <><span class="logo__mark" aria-hidden="true"></span><span>{settings.businessName}</span></>}
+    </a>
+    <button class="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="nav">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav" id="nav" aria-label="Main">
+      {links.map((l) => (
+        <a href={l.href} aria-current={path.startsWith(l.href) ? 'page' : undefined}>{l.label}</a>
+      ))}
+      <a href="/contact/" class="btn btn--small">Get Free Quote</a>
+    </nav>
+  </div>
+</header>

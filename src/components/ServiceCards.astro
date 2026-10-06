@@ -1,0 +1,23 @@
+---
+import { getCollection } from 'astro:content';
+import Art from './Art.astro';
+interface Props { limit?: number; exclude?: string }
+const { limit, exclude } = Astro.props;
+const services = (await getCollection('services'))
+  .filter((s) => s.id !== exclude)
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, limit);
+---
+<div class="cards">
+  {services.map((s) => (
+    <a class="card reveal" href={`/services/${s.id}/`}>
+      <div class="card__media"><Art image={s.data.image} art={s.data.art} alt={s.data.title} /></div>
+      <div class="card__body">
+        {s.data.priceNote && <span class="card__tag">{s.data.priceNote}</span>}
+        <h3>{s.data.title}</h3>
+        <p>{s.data.summary}</p>
+        <span class="card__more">Learn more →</span>
+      </div>
+    </a>
+  ))}
+</div>

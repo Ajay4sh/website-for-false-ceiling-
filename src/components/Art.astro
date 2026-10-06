@@ -1,0 +1,8 @@
+---
+// Shows a photo if one is uploaded, otherwise a built-in ceiling illustration.
+interface Props { image?: string | null; art?: string; alt: string; eager?: boolean }
+const { image, art = 'cove', alt, eager = false } = Astro.props;
+---
+{image
+  ? <img src={image} alt={alt} loading={eager ? 'eager' : 'lazy'} decoding="async" width="800" height="500" />
+  : <div class={`art art--${art}`} role="img" aria-label={alt}><span></span></div>}

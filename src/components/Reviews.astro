@@ -1,0 +1,24 @@
+---
+import data from '../data/reviews.json';
+type Review = { name: string; location?: string; rating?: number; text: string };
+const reviews = data.reviews as Review[];
+---
+{reviews.length > 0 && (
+  <section class="section section--alt">
+    <div class="container">
+      <header class="section__head">
+        <span class="eyebrow">Reviews</span>
+        <h2>What our customers say</h2>
+      </header>
+      <div class="reviews">
+        {reviews.map((r) => (
+          <figure class="review reveal">
+            <div class="review__stars" aria-label={`${r.rating ?? 5} out of 5 stars`}>{'★'.repeat(r.rating ?? 5)}</div>
+            <blockquote>{r.text}</blockquote>
+            <figcaption>{r.name}{r.location && <span> · {r.location}</span>}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+)}

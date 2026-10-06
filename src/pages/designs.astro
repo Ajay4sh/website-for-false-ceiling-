@@ -1,0 +1,19 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import DesignGallery from '../components/DesignGallery.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { settings } from '../lib/site';
+const crumbs = [{ name: 'Designs', href: '/designs/' }];
+---
+<Base
+  title={`False Ceiling Designs & Projects in ${settings.city}`}
+  description="Ceiling design ideas and completed projects for living rooms, bedrooms, kitchens, offices and showrooms: gypsum, POP, PVC, wooden and grid."
+  crumbs={crumbs}
+>
+  <PageHero title="Ceiling designs & projects" text="Ideas and completed work for homes and commercial spaces. Every design can be customised to your room." crumbs={crumbs} />
+  <section class="section section--alt">
+    <div class="container"><DesignGallery showText /></div>
+  </section>
+  <CtaBand title="Like a design?" text="Send us a photo on WhatsApp and we'll suggest how it can work in your room." />
+</Base>
