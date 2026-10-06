@@ -1,0 +1,63 @@
+{
+  "id": "ceilcraft",
+  "name": "CeilCraft Interiors",
+  "type": "False ceiling design and installation (gypsum, POP, PVC, grid, wooden, metal) with cove lighting, for homes, offices and shops",
+  "city": "Your City",
+  "areasServed": ["Your City", "Nearby Area 1", "Nearby Area 2"],
+  "phone": "+91 98765 43210",
+  "ownerWhatsapp": "919876543210",
+  "address": "Shop No. 1, Main Road, Your City, Your State 000000",
+  "hoursText": "Mon–Sat, 9:00 am – 7:00 pm",
+  "utcOffsetMinutes": 330,
+  "booking": {
+    "appointmentName": "free site visit and measurement",
+    "workingDays": [1, 2, 3, 4, 5, 6],
+    "startTime": "10:00",
+    "endTime": "18:00",
+    "slotMinutes": 60,
+    "maxPerSlot": 1,
+    "bookAheadDays": 14,
+    "minNoticeHours": 3,
+    "requiredDetails": ["customer name", "full site address with landmark", "which rooms or area", "preferred ceiling type if known"]
+  },
+  "leadQuestions": [
+    "Which area/locality is the site in?",
+    "Home, office or shop?",
+    "Which rooms, and rough size (e.g. 12x10 ft)?",
+    "Any ceiling type in mind (gypsum, POP, PVC, wooden)?",
+    "Rough budget and when they want the work done"
+  ],
+  "services": [
+    { "name": "Gypsum false ceiling", "note": "Most popular for homes; seamless finish; fire-resistant; fast and clean install" },
+    { "name": "POP false ceiling", "note": "Best for curves, mouldings and custom designs" },
+    { "name": "PVC ceiling", "note": "Waterproof, termite-proof; good for kitchens, bathrooms, balconies; budget-friendly" },
+    { "name": "Grid / mineral fibre ceiling", "note": "Offices and commercial spaces; easy access above" },
+    { "name": "Wooden & metal ceilings", "note": "Premium statement ceilings: wooden panels, louvers, metal baffles" },
+    { "name": "Cove & profile lighting", "note": "LED strips, profile lights, spotlights installed with the ceiling" }
+  ],
+  "priceList": {
+    "unit": "₹ per sq ft, material + labour, indicative only",
+    "items": [
+      { "item": "Gypsum board", "min": 85, "max": 120 },
+      { "item": "POP (Plaster of Paris)", "min": 90, "max": 130 },
+      { "item": "PVC panels", "min": 70, "max": 110 },
+      { "item": "Grid / mineral fibre", "min": 70, "max": 100 },
+      { "item": "Metal (baffle / linear)", "min": 180, "max": 350 },
+      { "item": "Wooden / WPC", "min": 250, "max": 450 },
+      { "item": "Cove lighting (per running ft)", "min": 90, "max": 90 }
+    ],
+    "rule": "Give only these ranges. The exact price is given only after the free site visit."
+  },
+  "faqs": [
+    { "q": "Gypsum or POP, which is better?", "a": "Gypsum is faster, cleaner and gives a uniform finish. POP is better for intricate curves and mouldings. Many designs combine both." },
+    { "q": "How long does installation take?", "a": "A standard 12x10 ft room usually takes 2–4 days including lighting and painting. Larger or multi-level designs take longer." },
+    { "q": "How much ceiling height is lost?", "a": "Typically 4–6 inches for a single-level ceiling, a little more for cove or multi-level sections." },
+    { "q": "Bathroom or kitchen?", "a": "Yes. PVC or moisture-resistant gypsum boards are recommended for wet and humid areas." },
+    { "q": "Do you do electrical and lighting work?", "a": "Yes. Lights, cove LED strips and wiring are installed along with the ceiling, by the same team." },
+    { "q": "Is the site visit free?", "a": "Yes. Measurement and consultation are free, with no obligation to book." }
+  ],
+  "policies": [
+    "Site visit and measurement are free, with no obligation.",
+    "A written quote with timeline is given after the site visit."
+  ]
+}
