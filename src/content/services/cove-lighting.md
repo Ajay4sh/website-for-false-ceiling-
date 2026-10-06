@@ -1,11 +1,14 @@
 ---
 title: Cove & Profile Lighting
+category: Ceilings
+show: true
 summary: Concealed LED strips, profile lights and spotlights, planned and installed along with your ceiling.
 seoTitle: Cove Lighting & LED Profile Lights for False Ceilings
 seoDescription: Cove LED lighting, profile lights and spotlights planned with your false ceiling design. Warm, cool and RGB options, with all electrical work included.
 image: ""
 art: baffle
 priceNote: Planned together with your ceiling
+price: "≈ ₹90 per running ft"
 idealFor:
   - Living rooms and bedrooms
   - Shops and showrooms

@@ -1,11 +1,14 @@
 ---
 title: Wooden & Metal Ceilings
+category: Ceilings
+show: true
 summary: Wooden panels, louvers and metal baffles for a warm or modern statement ceiling.
 seoTitle: Wooden & Metal False Ceiling Designs
 seoDescription: Wooden, WPC and metal false ceilings including rafters, louvers, linear and baffle ceilings for homes, restaurants, lobbies and showrooms.
 image: ""
 art: wood
 priceNote: Premium statement ceilings
+price: "₹180–450 per sq ft"
 idealFor:
   - Living and dining rooms
   - Restaurants, cafés and lobbies

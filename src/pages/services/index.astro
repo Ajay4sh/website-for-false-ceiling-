@@ -1,20 +1,20 @@
 ---
 import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
-import ServiceCards from '../../components/ServiceCards.astro';
+import ServiceGroups from '../../components/ServiceGroups.astro';
 import Process from '../../components/Process.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import { settings } from '../../lib/site';
 const crumbs = [{ name: 'Services', href: '/services/' }];
 ---
 <Base
-  title={`False Ceiling Services in ${settings.city}`}
-  description={`Gypsum, POP, PVC, grid, wooden and metal false ceilings plus cove lighting in ${settings.city}. Compare materials and book a free site visit.`}
+  title={`Interior Services: Ceilings, Walls & Partitions in ${settings.city}`}
+  description={`False ceilings, wall panelling, WPC louvers, partitions, painting and wall finishes in ${settings.city}. Compare options and book a free site visit.`}
   crumbs={crumbs}
 >
-  <PageHero title="Our false ceiling services" text="Gypsum, POP, PVC, grid, wooden and metal ceilings, with lighting, all from one team." crumbs={crumbs} />
+  <PageHero title="Our services" text="Ceilings, walls, partitions and finishes, with lighting, all from one team." crumbs={crumbs} />
   <section class="section">
-    <div class="container"><ServiceCards /></div>
+    <div class="container"><ServiceGroups /></div>
   </section>
   <Process />
   <CtaBand />

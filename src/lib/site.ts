@@ -5,7 +5,7 @@ export { settings };
 export const phoneHref = `tel:${settings.phone.replace(/[^\d+]/g, '')}`;
 export const mailHref = `mailto:${settings.email}`;
 
-export function waHref(text = `Hi ${settings.businessName}, I'd like a quote for a false ceiling.`) {
+export function waHref(text = `Hi ${settings.businessName}, I'd like a quote.`) {
   const num = settings.whatsapp.replace(/\D/g, '');
   return `https://wa.me/${num}?text=${encodeURIComponent(text)}`;
 }

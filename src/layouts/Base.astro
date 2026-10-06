@@ -32,6 +32,7 @@ const business = {
   areaServed: settings.areasServed,
   openingHours: settings.hours,
   priceRange: '₹₹',
+  knowsAbout: ['False ceiling', 'Wall panelling', 'WPC louvers', 'Gypsum partition', 'Glass partition', 'Wallpaper', 'Painting'],
   ...(settings.logo ? { logo: absUrl(settings.logo, site) } : {}),
   ...(ogImage ? { image: absUrl(ogImage, site) } : {}),
   sameAs: Object.values(settings.social).filter(Boolean),

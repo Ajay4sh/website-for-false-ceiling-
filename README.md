@@ -1,8 +1,8 @@
-# False Ceiling Business Website
+# Ceiling & Wall Interiors Website
 
-A fast, SEO-friendly website for a false ceiling business, with an **admin panel** for editing content without touching code.
+A fast, SEO-friendly website for an interiors business (false ceilings, wall panelling, louvers, partitions and finishes), with an **admin panel** for editing content without touching code.
 
-- **Pages:** Home, Services (one page per service), Designs gallery, Cost Calculator, About, Contact, Blog
+- **Pages:** Home, Services (14 pages grouped as Ceilings, Walls, Partitions and Finishes), Designs gallery, Cost Calculator (ceiling + wall), About, Contact, Blog
 - **Built with:** [Astro](https://astro.build) (static site, very fast)
 - **Admin panel:** [Pages CMS](https://pagescms.org) (free; edit through simple forms in your browser)
 - **Hosting:** Vercel (free); Netlify also supported
@@ -50,11 +50,23 @@ Every change you **Save** goes live automatically in about 1–2 minutes.
 | Add a photo of a finished project | **Designs & projects → Add entry** |
 | Show a project on the homepage | Open the project → tick **Show on homepage** |
 | Edit a service page | **Services** → open the service |
+| **Remove (hide) a service** | **Services** → open it → untick **Show on website** → Save |
+| Add a new service | **Services → Add entry**, then pick its **Category** (decides the menu) |
+| Move a service to another menu | Change its **Category** |
 | Add a customer review | **Customer reviews** → add item |
 | Add or change FAQs | **FAQs** |
 | Write a blog article | **Blog articles → Add entry** |
 | Replace the homepage illustration with a photo | **Business details & prices → Homepage photo** |
 | Add your logo | **Business details & prices → Logo** |
+
+### Removing a section you don't offer
+Everything is designed to be removed without breaking anything:
+
+- **A service** (e.g. Glass Partitions): untick **Show on website**. It disappears from the menu, homepage, services page, footer, related services and Google sitemap. Tick it again to bring it back. You can also delete it permanently.
+- **A whole group** (e.g. all Partitions): hide every service in that category. The heading and menu section disappear on their own. If every wall, partition and finish service is hidden, the **Walls & Partitions** menu disappears too.
+- **A calculator rate:** in **Business details & prices → Per-sq-ft rates**, delete the row. If no rows marked **Wall** are left, the calculator shows only the ceiling option.
+- **Gallery items, FAQs, blog articles:** delete them in their sections. Blog articles can also be ticked **Draft** to hide them.
+- After hiding a whole group, also check the **FAQs** and the homepage text in **Business details & prices** for any mention of it.
 
 ### Tips
 - **Photos:** use landscape photos (wider than tall), ideally about 1600 px wide. Compress them first at <https://squoosh.app> or <https://tinypng.com> so the site stays fast.
@@ -84,7 +96,9 @@ Requires Node.js 22.12 or newer.
 src/data/settings.json      Business details, homepage text and rates
 src/data/faqs.json          FAQs
 src/data/reviews.json       Customer reviews
-src/content/services/       One Markdown file per service page
+src/content/services/       One Markdown file per service page (category + show/hide flag)
+src/lib/constants.ts        Service categories, header dropdown menus, illustration names
+src/lib/catalog.ts          Helpers that return visible services, grouped by category
 src/content/designs/        Gallery / project entries
 src/content/blog/           Blog articles
 src/content.config.ts       Content schemas (fields each item must have)

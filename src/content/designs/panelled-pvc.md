@@ -6,8 +6,8 @@ material: PVC
 location: ""
 image: ""
 art: pvc
-featured: true
-order: 6
+featured: false
+order: 9
 ---
 
 Waterproof PVC panels in a wood finish for kitchens, bathrooms and balconies.

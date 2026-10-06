@@ -6,8 +6,8 @@ material: Metal
 location: ""
 image: ""
 art: baffle
-featured: true
-order: 5
+featured: false
+order: 7
 ---
 
 Linear metal baffles with track lights for a modern showroom ceiling.

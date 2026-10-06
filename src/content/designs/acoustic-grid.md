@@ -7,7 +7,7 @@ location: ""
 image: ""
 art: grid
 featured: true
-order: 4
+order: 5
 ---
 
 2×2 ft mineral fibre tiles on a T-grid with integrated LED panels, for quiet, well-lit workspaces.

@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import ServiceCards from '../components/ServiceCards.astro';
+import ServiceGroups from '../components/ServiceGroups.astro';
 import DesignGallery from '../components/DesignGallery.astro';
 import Calculator from '../components/Calculator.astro';
 import Process from '../components/Process.astro';
@@ -17,14 +17,14 @@ const faqSchema = {
 };
 ---
 <Base
-  title={`False Ceiling Design & Installation in ${settings.city} | ${settings.businessName}`}
-  description={`${settings.businessName}: gypsum, POP, PVC, grid and wooden false ceilings with cove lighting in ${settings.city}. Free site visit and transparent per-sq-ft pricing.`}
+  title={`False Ceiling, Wall Panelling & Partitions in ${settings.city} | ${settings.businessName}`}
+  description={`${settings.businessName}: false ceilings, wall panelling, WPC louvers, gypsum & glass partitions, painting and wall finishes in ${settings.city}. Free site visit and transparent per-sq-ft pricing.`}
   schema={[faqSchema]}
 >
   <section class="hero">
     <div class="container hero__inner">
       <div>
-        <span class="eyebrow">False ceiling specialists in {settings.city}</span>
+        <span class="eyebrow">Ceiling &amp; wall interiors in {settings.city}</span>
         <h1>{settings.heroTitle}</h1>
         <p class="lead">{settings.heroText}</p>
         <div class="hero__cta">
@@ -36,7 +36,7 @@ const faqSchema = {
         </ul>
       </div>
       {settings.heroImage
-        ? <div class="hero__photo"><img src={settings.heroImage} alt={`False ceiling by ${settings.businessName}`} width="800" height="600" fetchpriority="high" /></div>
+        ? <div class="hero__photo"><img src={settings.heroImage} alt={`Interior work by ${settings.businessName}`} width="800" height="600" fetchpriority="high" /></div>
         : (
           <div class="room" aria-hidden="true">
             <div class="room__ceiling">
@@ -55,10 +55,10 @@ const faqSchema = {
     <div class="container">
       <header class="section__head">
         <span class="eyebrow">What we do</span>
-        <h2>False ceiling services</h2>
+        <h2>Ceilings, walls &amp; more</h2>
         <p>Every material has its strengths. We help you pick the right one for your room, budget and climate.</p>
       </header>
-      <ServiceCards />
+      <ServiceGroups heading="h3" />
     </div>
   </section>
 
@@ -66,7 +66,7 @@ const faqSchema = {
     <div class="container">
       <header class="section__head">
         <span class="eyebrow">Inspiration</span>
-        <h2>Popular ceiling designs</h2>
+        <h2>Popular designs</h2>
         <p>Every design is customised to your room size and lighting plan.</p>
       </header>
       <DesignGallery featuredOnly limit={6} />
@@ -78,8 +78,8 @@ const faqSchema = {
     <div class="container estimate">
       <div>
         <span class="eyebrow">Quick estimate</span>
-        <h2>How much will my false ceiling cost?</h2>
-        <p>Enter your room size and pick a material for a rough budget. The final quote depends on the design, lighting and site conditions, and we confirm it after a free site visit.</p>
+        <h2>How much will it cost?</h2>
+        <p>Pick ceiling or wall, enter the size and choose a material for a rough budget. The final quote depends on the design, lighting and site conditions, and we confirm it after a free site visit.</p>
         <p><a href="/cost-calculator/">See all per-sq-ft rates →</a></p>
       </div>
       <Calculator />

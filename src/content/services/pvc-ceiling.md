@@ -1,11 +1,14 @@
 ---
 title: PVC Ceiling
+category: Ceilings
+show: true
 summary: Waterproof, termite-proof and low-maintenance. Perfect for kitchens, bathrooms and balconies.
 seoTitle: PVC Ceiling Panels Installation
 seoDescription: PVC false ceiling panels for kitchens, bathrooms, balconies and shops. Waterproof, termite-proof, easy to clean and budget-friendly.
 image: ""
 art: pvc
 priceNote: Budget-friendly and waterproof
+price: "₹70–110 per sq ft"
 idealFor:
   - Bathrooms and kitchens
   - Balconies and utility areas

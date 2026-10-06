@@ -1,7 +1,11 @@
 ---
-import { getCollection } from 'astro:content';
 import { settings, phoneHref, mailHref, waHref } from '../lib/site';
-const services = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
+import { MENUS, getServiceGroups } from '../lib/catalog';
+// One footer column per header menu (e.g. Ceilings, Walls & Partitions).
+const columns = (await Promise.all(MENUS.map(async (m) => ({
+  label: m.label,
+  items: (await getServiceGroups(m.categories)).flatMap((g) => g.items),
+})))).filter((c) => c.items.length > 0);
 const social = Object.entries(settings.social).filter(([, url]) => url);
 const labels: Record<string, string> = { facebook: 'Facebook', instagram: 'Instagram', youtube: 'YouTube', googleBusiness: 'Google' };
 ---
@@ -10,27 +14,27 @@ const labels: Record<string, string> = { facebook: 'Facebook', instagram: 'Insta
     <div class="footer__grid">
       <div>
         <a href="/" class="logo"><span class="logo__mark" aria-hidden="true"></span><span>{settings.businessName}</span></a>
-        <p>{settings.tagline} in {settings.city}. Free site visit and transparent per-sq-ft pricing.</p>
-        {social.length > 0 && (
-          <div class="social">
-            {social.map(([k, url]) => <a href={url} target="_blank" rel="noopener">{labels[k] ?? k}</a>)}
-          </div>
-        )}
-      </div>
-      <div>
-        <h3>Services</h3>
-        <ul>{services.map((s) => <li><a href={`/services/${s.id}/`}>{s.data.title}</a></li>)}</ul>
-      </div>
-      <div>
-        <h3>Company</h3>
-        <ul>
+        <p>{settings.tagline}. Serving {settings.city} with free site visits and transparent per-sq-ft pricing.</p>
+        <ul class="footer__links">
+          <li><a href="/services/">All Services</a></li>
           <li><a href="/designs/">Designs</a></li>
           <li><a href="/cost-calculator/">Cost Calculator</a></li>
           <li><a href="/about/">About Us</a></li>
           <li><a href="/blog/">Blog</a></li>
           <li><a href="/contact/">Contact</a></li>
         </ul>
+        {social.length > 0 && (
+          <div class="social">
+            {social.map(([k, url]) => <a href={url} target="_blank" rel="noopener">{labels[k] ?? k}</a>)}
+          </div>
+        )}
       </div>
+      {columns.map((c) => (
+        <div>
+          <h3>{c.label}</h3>
+          <ul>{c.items.map((s) => <li><a href={`/services/${s.id}/`}>{s.data.title}</a></li>)}</ul>
+        </div>
+      ))}
       <div>
         <h3>Contact</h3>
         <ul>

@@ -1,0 +1,24 @@
+---
+// All visible services, grouped under category headings (Ceilings, Walls, ...).
+import ServiceCards from './ServiceCards.astro';
+import { getServiceGroups, categoryId } from '../lib/catalog';
+interface Props { heading?: 'h2' | 'h3' }
+const { heading = 'h2' } = Astro.props;
+const H = heading;
+const groups = await getServiceGroups();
+const blurbs: Record<string, string> = {
+  Ceilings: 'False ceilings in every material, with lighting.',
+  Walls: 'Panelling, louvers, acoustic panels and wallpaper.',
+  Partitions: 'Drywall and glass partitions for homes and offices.',
+  Finishes: 'Painting, textures, moulding and cornices.',
+};
+---
+{groups.map((g) => (
+  <div class="group" id={categoryId(g.category)}>
+    <div class="group__head">
+      <H>{g.category}</H>
+      {blurbs[g.category] && <p>{blurbs[g.category]}</p>}
+    </div>
+    <ServiceCards categories={[g.category]} />
+  </div>
+))}

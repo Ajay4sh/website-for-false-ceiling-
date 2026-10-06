@@ -1,11 +1,14 @@
 ---
 title: Grid / Mineral Fibre Ceiling
+category: Ceilings
+show: true
 summary: Acoustic tiles on a T-grid for offices, showrooms and commercial spaces, with easy access to services above.
 seoTitle: Grid Ceiling & Mineral Fibre Tiles for Offices
 seoDescription: Grid false ceilings with mineral fibre or gypsum tiles for offices, showrooms, hospitals and schools. Acoustic comfort and easy maintenance access.
 image: ""
 art: grid
 priceNote: Ideal for offices and commercial spaces
+price: "₹70–100 per sq ft"
 idealFor:
   - Offices and conference rooms
   - Showrooms, clinics and schools

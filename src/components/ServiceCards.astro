@@ -1,11 +1,10 @@
 ---
-import { getCollection } from 'astro:content';
 import Art from './Art.astro';
-interface Props { limit?: number; exclude?: string }
-const { limit, exclude } = Astro.props;
-const services = (await getCollection('services'))
-  .filter((s) => s.id !== exclude)
-  .sort((a, b) => a.data.order - b.data.order)
+import { getServices, type Category } from '../lib/catalog';
+interface Props { categories?: Category[]; limit?: number; exclude?: string }
+const { categories, limit, exclude } = Astro.props;
+const services = (await getServices())
+  .filter((s) => s.id !== exclude && (!categories || categories.includes(s.data.category)))
   .slice(0, limit);
 ---
 <div class="cards">

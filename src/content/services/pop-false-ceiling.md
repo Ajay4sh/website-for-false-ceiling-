@@ -1,11 +1,14 @@
 ---
 title: POP False Ceiling
+category: Ceilings
+show: true
 summary: Plaster of Paris lets us create curves, mouldings and intricate designs for a classic, premium look.
 seoTitle: POP False Ceiling Design & Installation
 seoDescription: Custom POP (Plaster of Paris) false ceilings with curves, mouldings and cove lighting. Free site visit and clear per-sq-ft pricing.
 image: ""
 art: round
 priceNote: Best for custom shapes and mouldings
+price: "₹90–130 per sq ft"
 idealFor:
   - Living and dining rooms
   - Bedrooms with circular or curved designs

@@ -1,11 +1,14 @@
 ---
 title: Gypsum False Ceiling
+category: Ceilings
+show: true
 summary: Smooth, seamless ceilings with excellent fire resistance. Ideal for living rooms, bedrooms and offices.
 seoTitle: Gypsum False Ceiling Design & Installation
 seoDescription: Gypsum board false ceilings for homes and offices. Seamless finish, cove lighting, moisture-resistant boards, free site visit and per-sq-ft pricing.
 image: ""
 art: cove
 priceNote: Most popular choice for homes
+price: "₹85–120 per sq ft"
 idealFor:
   - Living rooms and bedrooms
   - Offices and cabins

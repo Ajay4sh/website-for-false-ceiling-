@@ -1,10 +1,14 @@
 {
   "siteUrl": "https://www.example.com",
   "businessName": "CeilCraft Interiors",
-  "tagline": "False ceiling design & installation",
+  "tagline": "Ceilings, walls & partitions: complete interior solutions",
   "city": "Your City",
   "state": "Your State",
-  "areasServed": ["Your City", "Nearby Area 1", "Nearby Area 2"],
+  "areasServed": [
+    "Your City",
+    "Nearby Area 1",
+    "Nearby Area 2"
+  ],
   "phone": "+91 98765 43210",
   "whatsapp": "919876543210",
   "email": "info@example.com",
@@ -12,23 +16,116 @@
   "hours": "Mon–Sat, 9:00 am – 7:00 pm",
   "mapEmbedUrl": "",
   "logo": "",
-  "heroTitle": "Beautiful ceilings, built to last.",
-  "heroText": "Gypsum, POP, PVC, grid and wooden false ceilings with cove lighting for homes, offices and shops. Free site visit, clear per-sq-ft pricing and a clean, on-time finish.",
+  "heroTitle": "Ceilings & walls, beautifully done.",
+  "heroText": "False ceilings, wall panelling, louvers, partitions, painting and more, all from one team. Free site visit, clear per-sq-ft pricing and a clean, on-time finish for homes, offices and shops.",
   "heroImage": "",
   "highlights": [
-    { "value": "Free", "label": "Site visit & measurement" },
-    { "value": "₹/sq ft", "label": "Transparent pricing" },
-    { "value": "2–4 days", "label": "Typical room install" }
+    {
+      "value": "Free",
+      "label": "Site visit & measurement"
+    },
+    {
+      "value": "₹/sq ft",
+      "label": "Transparent pricing"
+    },
+    {
+      "value": "One team",
+      "label": "Ceilings, walls & lighting"
+    }
   ],
-  "aboutText": "We are a local false ceiling and interior team. We design and install gypsum, POP, PVC, grid and wooden ceilings with lighting, for homes, offices and shops. Every project gets a free site visit, a clear written quote and a clean finish.",
+  "aboutText": "We are a local interior team specialising in ceilings and walls. We design and install false ceilings, wall panelling, louvers, partitions and finishes for homes, offices and shops. Every project gets a free site visit, a clear written quote and a clean finish.",
   "coveRatePerFt": 90,
   "rates": [
-    { "material": "Gypsum board", "min": 85, "max": 120 },
-    { "material": "POP (Plaster of Paris)", "min": 90, "max": 130 },
-    { "material": "PVC panels", "min": 70, "max": 110 },
-    { "material": "Grid / mineral fibre", "min": 70, "max": 100 },
-    { "material": "Metal (baffle / linear)", "min": 180, "max": 350 },
-    { "material": "Wooden / WPC", "min": 250, "max": 450 }
+    {
+      "material": "Gypsum board",
+      "min": 85,
+      "max": 120,
+      "appliesTo": "Ceiling"
+    },
+    {
+      "material": "POP (Plaster of Paris)",
+      "min": 90,
+      "max": 130,
+      "appliesTo": "Ceiling"
+    },
+    {
+      "material": "PVC panels",
+      "min": 70,
+      "max": 110,
+      "appliesTo": "Ceiling"
+    },
+    {
+      "material": "Grid / mineral fibre",
+      "min": 70,
+      "max": 100,
+      "appliesTo": "Ceiling"
+    },
+    {
+      "material": "Metal (baffle / linear)",
+      "min": 180,
+      "max": 350,
+      "appliesTo": "Ceiling"
+    },
+    {
+      "material": "Wooden / WPC",
+      "min": 250,
+      "max": 450,
+      "appliesTo": "Ceiling"
+    },
+    {
+      "material": "PVC wall panels",
+      "min": 90,
+      "max": 150,
+      "appliesTo": "Wall"
+    },
+    {
+      "material": "Charcoal / MDF / laminate panels",
+      "min": 250,
+      "max": 500,
+      "appliesTo": "Wall"
+    },
+    {
+      "material": "WPC & fluted louvers",
+      "min": 250,
+      "max": 450,
+      "appliesTo": "Wall"
+    },
+    {
+      "material": "Acoustic wall panels",
+      "min": 200,
+      "max": 450,
+      "appliesTo": "Wall"
+    },
+    {
+      "material": "Wallpaper (supply + install)",
+      "min": 60,
+      "max": 150,
+      "appliesTo": "Wall"
+    },
+    {
+      "material": "Gypsum partition",
+      "min": 110,
+      "max": 180,
+      "appliesTo": "Wall"
+    },
+    {
+      "material": "Glass partition (toughened)",
+      "min": 400,
+      "max": 800,
+      "appliesTo": "Wall"
+    },
+    {
+      "material": "Painting (putty + primer + paint)",
+      "min": 18,
+      "max": 35,
+      "appliesTo": "Wall"
+    },
+    {
+      "material": "Texture paint",
+      "min": 45,
+      "max": 100,
+      "appliesTo": "Wall"
+    }
   ],
   "social": {
     "facebook": "",

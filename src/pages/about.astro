@@ -9,7 +9,7 @@ const crumbs = [{ name: 'About', href: '/about/' }];
 ---
 <Base
   title={`About ${settings.businessName}`}
-  description={`About ${settings.businessName}, false ceiling designers and installers serving ${settings.areasServed.join(', ')}.`}
+  description={`About ${settings.businessName}, ceiling, wall and partition interior specialists serving ${settings.areasServed.join(', ')}.`}
   crumbs={crumbs}
 >
   <PageHero title={`About ${settings.businessName}`} text={settings.tagline} crumbs={crumbs} />
@@ -17,7 +17,7 @@ const crumbs = [{ name: 'About', href: '/about/' }];
     <div class="container split">
       <div>
         <span class="eyebrow">Who we are</span>
-        <h2>Ceilings done right, the first time</h2>
+        <h2>Ceilings and walls done right, the first time</h2>
         {settings.aboutText.split(/\n+/).map((p) => <p>{p}</p>)}
         <ul class="highlights" style="margin-top:24px">
           {settings.highlights.map((h) => <li><strong style="color:var(--gold-dark)">{h.value}</strong><span>{h.label}</span></li>)}

@@ -8,8 +8,8 @@ const posts = (await getCollection('blog', (p) => !p.data.draft)).sort((a, b) =>
 const crumbs = [{ name: 'Blog', href: '/blog/' }];
 const fmt = (d: Date) => d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
 ---
-<Base title="False Ceiling Tips, Costs & Design Ideas" description="Guides on false ceiling materials, costs, lighting and design ideas for homes and offices." crumbs={crumbs}>
-  <PageHero title="Ceiling guides & ideas" text="Practical advice on materials, costs, lighting and design." crumbs={crumbs} />
+<Base title="Ceiling & Wall Tips, Costs and Design Ideas" description="Guides on false ceilings, wall panels, partitions, costs, lighting and design ideas for homes and offices." crumbs={crumbs}>
+  <PageHero title="Guides & ideas" text="Practical advice on materials, costs, lighting and design." crumbs={crumbs} />
   <section class="section">
     <div class="container posts">
       {posts.map((p, i) => (

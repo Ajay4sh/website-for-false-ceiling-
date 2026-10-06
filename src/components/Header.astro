@@ -1,8 +1,12 @@
 ---
 import { settings } from '../lib/site';
+import { MENUS, getServiceGroups, categoryId } from '../lib/catalog';
+
 const path = Astro.url.pathname;
+// Each dropdown lists the visible services of its categories; empty menus are left out.
+const menus = (await Promise.all(MENUS.map(async (m) => ({ ...m, groups: await getServiceGroups(m.categories) }))))
+  .filter((m) => m.groups.length > 0);
 const links = [
-  { href: '/services/', label: 'Services' },
   { href: '/designs/', label: 'Designs' },
   { href: '/cost-calculator/', label: 'Cost Calculator' },
   { href: '/about/', label: 'About' },
@@ -20,6 +24,27 @@ const links = [
       <span></span><span></span><span></span>
     </button>
     <nav class="nav" id="nav" aria-label="Main">
+      {menus.map((m) => {
+        const active = m.groups.some((g) => g.items.some((s) => path === `/services/${s.id}/`));
+        return (
+          <details class="dropdown">
+            <summary aria-current={active ? 'page' : undefined}>{m.label}</summary>
+            <div class="dropdown__panel">
+              <div class="dropdown__groups">
+              {m.groups.map((g) => (
+                <div class="dropdown__group">
+                  {m.groups.length > 1 && <a class="dropdown__head" href={`/services/#${categoryId(g.category)}`}>{g.category}</a>}
+                  {g.items.map((s) => (
+                    <a href={`/services/${s.id}/`} aria-current={path === `/services/${s.id}/` ? 'page' : undefined}>{s.data.title}</a>
+                  ))}
+                </div>
+              ))}
+              </div>
+              <a class="dropdown__all" href="/services/">All services →</a>
+            </div>
+          </details>
+        );
+      })}
       {links.map((l) => (
         <a href={l.href} aria-current={path.startsWith(l.href) ? 'page' : undefined}>{l.label}</a>
       ))}
@@ -27,3 +52,17 @@ const links = [
     </nav>
   </div>
 </header>
+
+<script>
+  // Keep only one dropdown open, and close dropdowns on outside click or Escape.
+  const drops = [...document.querySelectorAll<HTMLDetailsElement>('.dropdown')];
+  drops.forEach((d) => d.addEventListener('toggle', () => {
+    if (d.open) drops.forEach((o) => o !== d && (o.open = false));
+  }));
+  document.addEventListener('click', (e) => {
+    if (!(e.target as HTMLElement).closest('.dropdown')) drops.forEach((d) => (d.open = false));
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') drops.forEach((d) => (d.open = false));
+  });
+</script>

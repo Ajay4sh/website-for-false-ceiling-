@@ -1,22 +1,26 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
 import Art from '../../components/Art.astro';
 import ServiceCards from '../../components/ServiceCards.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import { settings, phoneHref, waHref, absUrl } from '../../lib/site';
+import { getServices } from '../../lib/catalog';
 
 export async function getStaticPaths() {
-  const services = await getCollection('services');
+  // Only services marked "Show on website" get a page.
+  const services = await getServices();
   return services.map((s) => ({ params: { slug: s.id }, props: { service: s } }));
 }
 
 const { service } = Astro.props;
 const { Content } = await render(service);
 const d = service.data;
+// Related services come from the same category; fall back to all services if it has no others.
+const hasSiblings = (await getServices()).some((s) => s.id !== service.id && s.data.category === d.category);
+const relatedCategories = hasSiblings ? [d.category] : undefined;
 const crumbs = [{ name: 'Services', href: '/services/' }, { name: d.title, href: `/services/${service.id}/` }];
-const rate = settings.rates.find((r) => r.material.toLowerCase().startsWith(d.title.split(/[ /&]/)[0].toLowerCase()));
 const serviceSchema = {
   '@context': 'https://schema.org',
   '@type': 'Service',
@@ -42,10 +46,10 @@ const serviceSchema = {
         <div class="prose"><Content /></div>
       </article>
       <aside class="aside">
-        {rate && (
+        {d.price && (
           <div class="aside__box">
             <h3>Indicative price</h3>
-            <p><strong style="font-size:1.4rem;color:var(--ink)">₹{rate.min}–{rate.max}</strong> per sq ft</p>
+            <p><strong style="font-size:1.25rem;color:var(--ink)">{d.price}</strong></p>
             <a href="/cost-calculator/" class="btn btn--outline btn--block btn--small">Estimate my room</a>
           </div>
         )}
@@ -66,8 +70,8 @@ const serviceSchema = {
   </section>
   <section class="section section--alt">
     <div class="container">
-      <header class="section__head"><h2>Other services</h2></header>
-      <ServiceCards exclude={service.id} limit={3} />
+      <header class="section__head"><h2>Related services</h2></header>
+      <ServiceCards categories={relatedCategories} exclude={service.id} limit={3} />
     </div>
   </section>
   <CtaBand title={`Get a quote for your ${d.title.toLowerCase()}`} />
