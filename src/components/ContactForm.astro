@@ -16,6 +16,13 @@ import { settings } from '../lib/site';
     </label>
     <label>Approx. area (sq ft)<input type="number" name="area" min="1" inputmode="numeric" /></label>
   </div>
+  <label>Material supply
+    <select name="supply">
+      <option>With material (supply + installation)</option>
+      <option>Labour only (I will buy the material)</option>
+      <option>Not sure yet</option>
+    </select>
+  </label>
   <label>Locality / area<input type="text" name="locality" autocomplete="address-level2" /></label>
   <label>Message<textarea name="message" rows="3" placeholder="Ceiling / wall / partition, rooms, preferred material, timeline…"></textarea></label>
   <p class="form__error" data-error role="alert" hidden></p>
@@ -42,6 +49,7 @@ import { settings } from '../lib/site';
         `Name: ${name}`,
         `Phone: ${phone}`,
         `Property: ${d.get('property')}`,
+        `Material supply: ${d.get('supply')}`,
         d.get('area') && `Area: ${d.get('area')} sq ft`,
         d.get('locality') && `Locality: ${d.get('locality')}`,
         d.get('message') && `Message: ${d.get('message')}`,

@@ -9,6 +9,7 @@ image: ""
 art: cove
 priceNote: Most popular choice for homes
 price: "₹85–120 per sq ft"
+labourPrice: "₹25–40 per sq ft"
 idealFor:
   - Living rooms and bedrooms
   - Offices and cabins

@@ -90,7 +90,7 @@ content:
         type: text
       - name: rates
         label: Per-sq-ft rates (cost calculator)
-        description: Delete a row to remove it from the calculator. If no Wall rates are left, the Wall option disappears.
+        description: Delete a row to remove it from the calculator. If no Wall rates are left, the Wall option disappears. If no row has labour prices, the "Labour only" option disappears.
         type: object
         list: true
         fields:
@@ -100,10 +100,18 @@ content:
             type: select
             default: Ceiling
             options: { values: [Ceiling, Wall] }
-          - { name: min, label: Minimum ₹ per sq ft, type: number, required: true }
-          - { name: max, label: Maximum ₹ per sq ft, type: number, required: true }
+          - { name: min, label: With material – minimum ₹ per sq ft, type: number, required: true }
+          - { name: max, label: With material – maximum ₹ per sq ft, type: number, required: true }
+          - name: labourMin
+            label: Labour only – minimum ₹ per sq ft
+            description: Leave both labour fields empty to show "On request" for labour-only work.
+            type: number
+          - { name: labourMax, label: Labour only – maximum ₹ per sq ft, type: number }
       - name: coveRatePerFt
-        label: Cove LED lighting ₹ per running ft
+        label: Cove LED lighting ₹ per running ft (with material)
+        type: number
+      - name: coveLabourRatePerFt
+        label: Cove LED lighting ₹ per running ft (labour only)
         type: number
       - name: social
         label: Social media links
@@ -176,7 +184,11 @@ content:
       - { name: priceNote, label: Small tag line on card, type: string }
       - name: price
         label: Indicative price (shown on the page)
-        description: e.g. ₹85–120 per sq ft. Leave empty to hide the price box.
+        description: With material, e.g. ₹85–120 per sq ft. Leave empty to hide the price box.
+        type: string
+      - name: labourPrice
+        label: Labour-only price (optional)
+        description: e.g. ₹25–40 per sq ft. Leave empty to hide.
         type: string
       - { name: benefits, label: Key benefits, type: string, list: true }
       - { name: idealFor, label: Ideal for, type: string, list: true }

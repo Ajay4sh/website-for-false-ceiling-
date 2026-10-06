@@ -9,6 +9,9 @@ const tables = [
   { label: 'Ceilings', rows: settings.rates.filter((r) => r.appliesTo !== 'Wall') },
   { label: 'Walls & partitions', rows: settings.rates.filter((r) => r.appliesTo === 'Wall') },
 ].filter((t) => t.rows.length > 0);
+// The "Labour only" column appears only when at least one rate has a labour-only price.
+const hasLabour = (r: { labourMin?: number | null; labourMax?: number | null }) => Number(r.labourMin) > 0 && Number(r.labourMax) > 0;
+const showLabour = settings.rates.some(hasLabour);
 ---
 <Base
   title={`False Ceiling & Wall Panelling Cost per sq ft in ${settings.city}`}
@@ -20,13 +23,25 @@ const tables = [
     <div class="container estimate">
       <div>
         <h2>Indicative rates</h2>
-        <p>Rates include material and labour for a standard design. Multi-level designs, special finishes and lighting fixtures are extra.</p>
+        <p>Rates are per sq ft for a standard design. <strong>With material</strong> means we supply everything and install it. <strong>Labour only</strong> means you buy the material and we install it. Multi-level designs, special finishes and lighting fixtures are extra.</p>
         {tables.map((t) => (
           <table class="rates">
-            <thead><tr><th>{t.label}</th><th>Rate (per sq ft)</th></tr></thead>
+            <thead><tr><th>{t.label}</th><th>With material</th>{showLabour && <th>Labour only</th>}</tr></thead>
             <tbody>
-              {t.rows.map((r) => <tr><td>{r.material}</td><td>₹{r.min} – ₹{r.max}</td></tr>)}
-              {t.label === 'Ceilings' && settings.coveRatePerFt > 0 && <tr><td>Cove LED lighting</td><td>≈ ₹{settings.coveRatePerFt} per running ft</td></tr>}
+              {t.rows.map((r) => (
+                <tr>
+                  <td>{r.material}</td>
+                  <td>₹{r.min} – ₹{r.max}</td>
+                  {showLabour && <td>{hasLabour(r) ? `₹${r.labourMin} – ₹${r.labourMax}` : 'On request'}</td>}
+                </tr>
+              ))}
+              {t.label === 'Ceilings' && settings.coveRatePerFt > 0 && (
+                <tr>
+                  <td>Cove LED lighting (per running ft)</td>
+                  <td>≈ ₹{settings.coveRatePerFt}</td>
+                  {showLabour && <td>{settings.coveLabourRatePerFt ? `≈ ₹${settings.coveLabourRatePerFt}` : 'On request'}</td>}
+                </tr>
+              )}
             </tbody>
           </table>
         ))}

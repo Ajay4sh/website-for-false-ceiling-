@@ -9,6 +9,7 @@ image: ""
 art: paint
 priceNote: The finishing touch
 price: "₹18–100 per sq ft (by finish)"
+labourPrice: "₹8–40 per sq ft"
 idealFor:
   - New homes and renovations
   - Feature walls with texture

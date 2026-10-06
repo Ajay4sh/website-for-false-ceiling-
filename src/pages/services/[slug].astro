@@ -49,7 +49,10 @@ const serviceSchema = {
         {d.price && (
           <div class="aside__box">
             <h3>Indicative price</h3>
-            <p><strong style="font-size:1.25rem;color:var(--ink)">{d.price}</strong></p>
+            <div class="price">
+              <p><strong class="price__main">{d.price}</strong><br /><small>with material</small></p>
+              {d.labourPrice && <p class="price-labour"><strong>{d.labourPrice}</strong> <small>labour only</small></p>}
+            </div>
             <a href="/cost-calculator/" class="btn btn--outline btn--block btn--small">Estimate my room</a>
           </div>
         )}

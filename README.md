@@ -47,6 +47,7 @@ Every change you **Save** goes live automatically in about 1–2 minutes.
 | Change phone, WhatsApp, email, address or hours | **Business details & prices** |
 | Change the business name, city or areas served | **Business details & prices** |
 | Change per-sq-ft rates (cost calculator) | **Business details & prices → Per-sq-ft rates** |
+| Change labour-only rates | Same place: the **Labour only** min/max fields on each rate (and the cove labour rate) |
 | Add a photo of a finished project | **Designs & projects → Add entry** |
 | Show a project on the homepage | Open the project → tick **Show on homepage** |
 | Edit a service page | **Services** → open the service |
@@ -65,6 +66,7 @@ Everything is designed to be removed without breaking anything:
 - **A service** (e.g. Glass Partitions): untick **Show on website**. It disappears from the menu, homepage, services page, footer, related services and Google sitemap. Tick it again to bring it back. You can also delete it permanently.
 - **A whole group** (e.g. all Partitions): hide every service in that category. The heading and menu section disappear on their own. If every wall, partition and finish service is hidden, the **Walls & Partitions** menu disappears too.
 - **A calculator rate:** in **Business details & prices → Per-sq-ft rates**, delete the row. If no rows marked **Wall** are left, the calculator shows only the ceiling option.
+- **Labour-only option:** empty the labour fields on a rate and it shows "On request". Empty them on every rate and the **With material / Labour only** switch disappears from the calculator and the rates table. Remove a service's **Labour-only price** to hide it on that page.
 - **Gallery items, FAQs, blog articles:** delete them in their sections. Blog articles can also be ticked **Draft** to hide them.
 - After hiding a whole group, also check the **FAQs** and the homepage text in **Business details & prices** for any mention of it.
 

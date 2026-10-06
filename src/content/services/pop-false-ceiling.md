@@ -9,6 +9,7 @@ image: ""
 art: round
 priceNote: Best for custom shapes and mouldings
 price: "₹90–130 per sq ft"
+labourPrice: "₹30–45 per sq ft"
 idealFor:
   - Living and dining rooms
   - Bedrooms with circular or curved designs

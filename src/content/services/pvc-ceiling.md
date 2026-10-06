@@ -9,6 +9,7 @@ image: ""
 art: pvc
 priceNote: Budget-friendly and waterproof
 price: "₹70–110 per sq ft"
+labourPrice: "₹15–25 per sq ft"
 idealFor:
   - Bathrooms and kitchens
   - Balconies and utility areas

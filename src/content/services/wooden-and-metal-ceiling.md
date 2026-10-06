@@ -9,6 +9,7 @@ image: ""
 art: wood
 priceNote: Premium statement ceilings
 price: "₹180–450 per sq ft"
+labourPrice: "₹40–120 per sq ft"
 idealFor:
   - Living and dining rooms
   - Restaurants, cafés and lobbies

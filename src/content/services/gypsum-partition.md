@@ -9,6 +9,7 @@ image: ""
 art: partition
 priceNote: Faster than brick walls
 price: "₹110–180 per sq ft"
+labourPrice: "₹30–50 per sq ft"
 idealFor:
   - Office cabins and meeting rooms
   - Dividing a room into two

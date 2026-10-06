@@ -35,96 +35,127 @@
   ],
   "aboutText": "We are a local interior team specialising in ceilings and walls. We design and install false ceilings, wall panelling, louvers, partitions and finishes for homes, offices and shops. Every project gets a free site visit, a clear written quote and a clean finish.",
   "coveRatePerFt": 90,
+  "coveLabourRatePerFt": 30,
   "rates": [
     {
       "material": "Gypsum board",
+      "appliesTo": "Ceiling",
       "min": 85,
       "max": 120,
-      "appliesTo": "Ceiling"
+      "labourMin": 25,
+      "labourMax": 40
     },
     {
       "material": "POP (Plaster of Paris)",
+      "appliesTo": "Ceiling",
       "min": 90,
       "max": 130,
-      "appliesTo": "Ceiling"
+      "labourMin": 30,
+      "labourMax": 45
     },
     {
       "material": "PVC panels",
+      "appliesTo": "Ceiling",
       "min": 70,
       "max": 110,
-      "appliesTo": "Ceiling"
+      "labourMin": 15,
+      "labourMax": 25
     },
     {
       "material": "Grid / mineral fibre",
+      "appliesTo": "Ceiling",
       "min": 70,
       "max": 100,
-      "appliesTo": "Ceiling"
+      "labourMin": 15,
+      "labourMax": 25
     },
     {
       "material": "Metal (baffle / linear)",
+      "appliesTo": "Ceiling",
       "min": 180,
       "max": 350,
-      "appliesTo": "Ceiling"
+      "labourMin": 40,
+      "labourMax": 70
     },
     {
       "material": "Wooden / WPC",
+      "appliesTo": "Ceiling",
       "min": 250,
       "max": 450,
-      "appliesTo": "Ceiling"
+      "labourMin": 60,
+      "labourMax": 120
     },
     {
       "material": "PVC wall panels",
+      "appliesTo": "Wall",
       "min": 90,
       "max": 150,
-      "appliesTo": "Wall"
+      "labourMin": 20,
+      "labourMax": 35
     },
     {
       "material": "Charcoal / MDF / laminate panels",
+      "appliesTo": "Wall",
       "min": 250,
       "max": 500,
-      "appliesTo": "Wall"
+      "labourMin": 40,
+      "labourMax": 80
     },
     {
       "material": "WPC & fluted louvers",
+      "appliesTo": "Wall",
       "min": 250,
       "max": 450,
-      "appliesTo": "Wall"
+      "labourMin": 40,
+      "labourMax": 70
     },
     {
       "material": "Acoustic wall panels",
+      "appliesTo": "Wall",
       "min": 200,
       "max": 450,
-      "appliesTo": "Wall"
+      "labourMin": 40,
+      "labourMax": 80
     },
     {
-      "material": "Wallpaper (supply + install)",
+      "material": "Wallpaper",
+      "appliesTo": "Wall",
       "min": 60,
       "max": 150,
-      "appliesTo": "Wall"
+      "labourMin": 12,
+      "labourMax": 25
     },
     {
       "material": "Gypsum partition",
+      "appliesTo": "Wall",
       "min": 110,
       "max": 180,
-      "appliesTo": "Wall"
+      "labourMin": 30,
+      "labourMax": 50
     },
     {
       "material": "Glass partition (toughened)",
+      "appliesTo": "Wall",
       "min": 400,
       "max": 800,
-      "appliesTo": "Wall"
+      "labourMin": 60,
+      "labourMax": 120
     },
     {
       "material": "Painting (putty + primer + paint)",
+      "appliesTo": "Wall",
       "min": 18,
       "max": 35,
-      "appliesTo": "Wall"
+      "labourMin": 8,
+      "labourMax": 15
     },
     {
       "material": "Texture paint",
+      "appliesTo": "Wall",
       "min": 45,
       "max": 100,
-      "appliesTo": "Wall"
+      "labourMin": 20,
+      "labourMax": 40
     }
   ],
   "social": {

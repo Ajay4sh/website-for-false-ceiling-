@@ -20,6 +20,7 @@ const services = defineCollection({
     art,
     priceNote: z.string().nullish(),
     price: z.string().nullish(),
+    labourPrice: z.string().nullish(),
     idealFor: z.array(z.string()).nullish().transform((v) => v ?? []),
     benefits: z.array(z.string()).nullish().transform((v) => v ?? []),
     order: z.preprocess(blank, z.number().default(99)),

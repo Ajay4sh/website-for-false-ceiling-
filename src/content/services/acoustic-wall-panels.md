@@ -9,6 +9,7 @@ image: ""
 art: acoustic
 priceNote: Better sound, better rooms
 price: "₹200–450 per sq ft"
+labourPrice: "₹40–80 per sq ft"
 idealFor:
   - Home theatres and media rooms
   - Conference rooms and offices

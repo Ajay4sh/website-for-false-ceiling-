@@ -9,6 +9,7 @@ image: ""
 art: grid
 priceNote: Ideal for offices and commercial spaces
 price: "₹70–100 per sq ft"
+labourPrice: "₹15–25 per sq ft"
 idealFor:
   - Offices and conference rooms
   - Showrooms, clinics and schools

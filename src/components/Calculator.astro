@@ -1,22 +1,34 @@
 ---
 import { settings } from '../lib/site';
 
+type Rate = (typeof settings.rates)[number] & { labourMin?: number | null; labourMax?: number | null };
+const allRates = settings.rates as Rate[];
+const hasLabour = (r: Rate) => Number(r.labourMin) > 0 && Number(r.labourMax) > 0;
+
 // Rates are grouped by what they apply to. A mode with no rates is hidden automatically.
-const rates = settings.rates.map((r, i) => ({ ...r, i }));
+const rates = allRates.map((r, i) => ({ ...r, i }));
 const ceilingRates = rates.filter((r) => r.appliesTo !== 'Wall');
 const wallRates = rates.filter((r) => r.appliesTo === 'Wall');
 const modes = [
   ceilingRates.length > 0 && { id: 'ceiling', label: 'Ceiling' },
   wallRates.length > 0 && { id: 'wall', label: 'Wall / Partition' },
 ].filter(Boolean) as { id: 'ceiling' | 'wall'; label: string }[];
-const config = { rates: settings.rates, cove: settings.coveRatePerFt };
 const first = modes[0]?.id;
+
+// The "Labour only" option appears only when at least one rate has a labour-only price.
+const offerLabour = allRates.some(hasLabour);
+const coveLabour = Number((settings as { coveLabourRatePerFt?: number }).coveLabourRatePerFt) || 0;
+const config = {
+  rates: allRates.map((r) => ({ min: r.min, max: r.max, labourMin: hasLabour(r) ? r.labourMin : null, labourMax: hasLabour(r) ? r.labourMax : null })),
+  cove: settings.coveRatePerFt,
+  coveLabour,
+};
 ---
 {modes.length > 0 && (
-  <form class="calc" data-calc data-config={JSON.stringify(config)} data-mode={first} onsubmit="return false">
+  <form class="calc" data-calc data-config={JSON.stringify(config)} data-mode={first} data-supply="with" onsubmit="return false">
     {modes.length > 1 && (
       <div class="seg" role="group" aria-label="What do you want to estimate?">
-        {modes.map((m) => <button type="button" data-set-mode={m.id} aria-pressed={m.id === first ? "true" : "false"}>{m.label}</button>)}
+        {modes.map((m) => <button type="button" data-set-mode={m.id} aria-pressed={m.id === first ? 'true' : 'false'}>{m.label}</button>)}
       </div>
     )}
 
@@ -36,16 +48,27 @@ const first = modes[0]?.id;
     {ceilingRates.length > 0 && (
       <label data-mode-only="ceiling" hidden={first !== 'ceiling'}>Material
         <select name="mat-ceiling">
-          {ceilingRates.map((r) => <option value={r.i}>{r.material} (₹{r.min}–{r.max}/sq ft)</option>)}
+          {ceilingRates.map((r) => <option value={r.i}>{r.material}</option>)}
         </select>
       </label>
     )}
     {wallRates.length > 0 && (
       <label data-mode-only="wall" hidden={first !== 'wall'}>Material / work
         <select name="mat-wall">
-          {wallRates.map((r) => <option value={r.i}>{r.material} (₹{r.min}–{r.max}/sq ft)</option>)}
+          {wallRates.map((r) => <option value={r.i}>{r.material}</option>)}
         </select>
       </label>
+    )}
+
+    {offerLabour && (
+      <fieldset class="supply">
+        <legend>Material supply</legend>
+        <div class="seg" role="group" aria-label="Material supply">
+          <button type="button" data-set-supply="with" aria-pressed="true">With material</button>
+          <button type="button" data-set-supply="labour" aria-pressed="false">Labour only</button>
+        </div>
+        <small class="supply__hint" data-supply-hint>We supply all material and do the installation.</small>
+      </fieldset>
     )}
 
     {settings.coveRatePerFt > 0 && (
@@ -56,52 +79,82 @@ const first = modes[0]?.id;
     </label>
 
     <div class="calc__result" aria-live="polite">
-      <span>Estimated budget</span>
+      <span data-out-label>Estimated budget (with material)</span>
       <strong data-out>—</strong>
       <small data-area></small>
+      <small class="calc__rate" data-rate></small>
     </div>
     <a href="/contact/" class="btn btn--block">Get an exact quote</a>
-    <p class="form__hint">Indicative estimate including material and labour. Final price is confirmed after a free site visit.</p>
+    <p class="form__hint">Indicative estimate. Final price is confirmed after a free site visit.</p>
   </form>
 )}
 
 <script>
+  type Rate = { min: number; max: number; labourMin: number | null; labourMax: number | null };
   const inr = (n: number) => '₹' + Math.round(n).toLocaleString('en-IN');
+
   document.querySelectorAll<HTMLFormElement>('[data-calc]').forEach((form) => {
-    const cfg = JSON.parse(form.dataset.config || '{}') as { rates: { min: number; max: number }[]; cove: number };
+    const cfg = JSON.parse(form.dataset.config || '{}') as { rates: Rate[]; cove: number; coveLabour: number };
     const out = form.querySelector<HTMLElement>('[data-out]')!;
+    const outLabel = form.querySelector<HTMLElement>('[data-out-label]')!;
     const areaEl = form.querySelector<HTMLElement>('[data-area]')!;
+    const rateEl = form.querySelector<HTMLElement>('[data-rate]')!;
+    const hint = form.querySelector<HTMLElement>('[data-supply-hint]');
     const field = <T extends Element>(name: string) => form.elements.namedItem(name) as T | null;
     const num = (name: string) => parseFloat(field<HTMLInputElement>(name)?.value ?? '');
 
     const update = () => {
       const wall = form.dataset.mode === 'wall';
+      const labour = form.dataset.supply === 'labour';
+      outLabel.textContent = labour ? 'Estimated labour cost' : 'Estimated budget (with material)';
+      if (hint) hint.textContent = labour
+        ? 'You buy the material; we do the installation. Prices are for labour only.'
+        : 'We supply all material and do the installation.';
+
       const a = num('a');
       const b = num('b');
       const rate = cfg.rates[Number(field<HTMLSelectElement>(wall ? 'mat-wall' : 'mat-ceiling')?.value)];
+      rateEl.textContent = '';
       if (!(a > 0 && b > 0) || !rate) { out.textContent = '—'; areaEl.textContent = 'Enter the size'; return; }
+
+      const min = labour ? rate.labourMin : rate.min;
+      const max = labour ? rate.labourMax : rate.max;
+      if (!min || !max) {
+        out.textContent = 'On request';
+        areaEl.textContent = 'Labour-only work for this material is quoted after a site visit.';
+        return;
+      }
+      rateEl.textContent = `Rate: ₹${min}–${max} per sq ft${labour ? ' (labour only)' : ''}`;
+
       if (wall) {
         const walls = Math.max(1, Math.round(num('walls')) || 1);
         const area = a * b * walls;
-        out.textContent = `${inr(area * rate.min)} – ${inr(area * rate.max)}`;
+        out.textContent = `${inr(area * min)} – ${inr(area * max)}`;
         areaEl.textContent = `${Math.round(area)} sq ft of wall`;
       } else {
-        const cove = !!field<HTMLInputElement>('cove')?.checked;
+        const coveRate = labour ? cfg.coveLabour : cfg.cove;
+        const cove = !!field<HTMLInputElement>('cove')?.checked && coveRate > 0;
         const area = a * b;
         const run = 2 * (a + b);
-        const extra = cove ? run * cfg.cove : 0;
-        out.textContent = `${inr(area * rate.min + extra)} – ${inr(area * rate.max + extra)}`;
+        const extra = cove ? run * coveRate : 0;
+        out.textContent = `${inr(area * min + extra)} – ${inr(area * max + extra)}`;
         areaEl.textContent = `${Math.round(area)} sq ft` + (cove ? ` + ${Math.round(run)} ft cove lighting` : '');
       }
     };
 
-    form.querySelectorAll<HTMLButtonElement>('[data-set-mode]').forEach((btn) => btn.addEventListener('click', () => {
-      const mode = btn.dataset.setMode!;
+    const toggle = (attr: string, apply: (value: string) => void) => {
+      form.querySelectorAll<HTMLButtonElement>(`[${attr}]`).forEach((btn) => btn.addEventListener('click', () => {
+        form.querySelectorAll(`[${attr}]`).forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+        apply(btn.getAttribute(attr)!);
+        update();
+      }));
+    };
+    toggle('data-set-mode', (mode) => {
       form.dataset.mode = mode;
-      form.querySelectorAll('[data-set-mode]').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
       form.querySelectorAll<HTMLElement>('[data-mode-only]').forEach((el) => { el.hidden = el.dataset.modeOnly !== mode; });
-      update();
-    }));
+    });
+    toggle('data-set-supply', (supply) => { form.dataset.supply = supply; });
+
     form.addEventListener('input', update);
     update();
   });

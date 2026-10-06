@@ -9,6 +9,7 @@ image: ""
 art: panel
 priceNote: Feature walls & TV units
 price: "₹90–500 per sq ft (by material)"
+labourPrice: "₹20–80 per sq ft"
 idealFor:
   - TV unit and feature walls
   - Bed back walls

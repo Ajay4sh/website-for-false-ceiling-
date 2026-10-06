@@ -9,6 +9,7 @@ image: ""
 art: glass
 priceNote: Open, bright spaces
 price: "₹400–800 per sq ft"
+labourPrice: "₹60–120 per sq ft"
 idealFor:
   - Office cabins and conference rooms
   - Shower enclosures

@@ -9,6 +9,7 @@ image: ""
 art: wallpaper
 priceNote: Quick makeover
 price: "₹60–150 per sq ft"
+labourPrice: "₹12–25 per sq ft"
 idealFor:
   - Bedroom and living room feature walls
   - Kids' rooms

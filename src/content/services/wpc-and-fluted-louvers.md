@@ -9,6 +9,7 @@ image: ""
 art: louver
 priceNote: Trending modern finish
 price: "₹250–450 per sq ft"
+labourPrice: "₹40–70 per sq ft"
 idealFor:
   - TV and feature walls
   - Ceiling and wall combinations

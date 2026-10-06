@@ -9,6 +9,7 @@ image: ""
 art: moulding
 priceNote: Classic elegance
 price: "₹60–250 per running ft"
+labourPrice: "₹20–60 per running ft"
 idealFor:
   - Bedrooms and living rooms
   - Lobbies and staircases

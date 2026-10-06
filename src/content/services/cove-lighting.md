@@ -9,6 +9,7 @@ image: ""
 art: baffle
 priceNote: Planned together with your ceiling
 price: "≈ ₹90 per running ft"
+labourPrice: "≈ ₹30 per running ft"
 idealFor:
   - Living rooms and bedrooms
   - Shops and showrooms
