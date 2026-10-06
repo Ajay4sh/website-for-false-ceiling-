@@ -19,9 +19,10 @@ test("extracts customer messages and skips delivery receipts", () => {
         changes: [
           {
             value: {
+              metadata: { phone_number_id: "555" },
               messages: [
                 { id: "m1", from: "919811112222", type: "text", text: { body: "ceiling ka rate?" } },
-                { id: "m2", from: "919811112222", type: "image", image: { id: "img" } },
+                { id: "m2", from: "919811112222", type: "image", image: { id: "img", caption: "aisa chahiye" } },
               ],
             },
           },
@@ -31,8 +32,8 @@ test("extracts customer messages and skips delivery receipts", () => {
     ],
   };
   assert.deepEqual(extractMessages(payload), [
-    { id: "m1", from: "919811112222", type: "text", text: "ceiling ka rate?" },
-    { id: "m2", from: "919811112222", type: "image", text: null },
+    { id: "m1", from: "919811112222", phoneNumberId: "555", type: "text", text: "ceiling ka rate?", mediaId: null },
+    { id: "m2", from: "919811112222", phoneNumberId: "555", type: "image", text: "aisa chahiye", mediaId: "img" },
   ]);
   assert.deepEqual(extractMessages({}), []);
 });

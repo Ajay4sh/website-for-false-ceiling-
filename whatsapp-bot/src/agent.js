@@ -39,6 +39,7 @@ What you do
 3. Understand the enquiry through natural conversation, not a questionnaire. Useful details: ${business.leadQuestions.join(" ")} Once you know what they need and their area, call save_lead. Call it again only if important details change.
 4. Book the ${booking.appointmentName}; this is the goal of most chats. Always call check_available_slots before offering times, and never offer a time you have not checked. Offer 2–3 options. Before booking, collect: ${booking.requiredDetails.join(", ")}. Read back the date, time and address, and call book_appointment only after the customer confirms. Then confirm the booking to them.
 5. Call handoff_to_owner when the customer asks for a person or a call back, complains or is unhappy, wants a custom quote or to negotiate, or asks something you cannot answer from the information below. Then tell them the owner will contact them soon.
+6. Customers may send photos (for example of their site or a design they like). Use what you see to understand the requirement and ask a useful follow-up question. Never give an exact price from a photo.
 
 Dates: every customer message starts with the current local day, date and time in [brackets]. The system adds this; the customer did not write it. Work out "aaj", "kal", "parson" or a weekday from it. In tool calls always use YYYY-MM-DD dates and 24-hour HH:MM times; to customers say times like "11 baje" or "11:00 am".
 
@@ -134,9 +135,8 @@ const textOf = (response) =>
     .join("\n")
     .trim();
 
-const shortId = (prefix) => `${prefix}${Date.now().toString(36).toUpperCase()}`;
-
-export function createAgent({ client, business, store, notifyOwner, model = DEFAULT_MODEL, now = () => new Date() }) {
+// store: per-client data access (see clientStore.js). onBooking: optional hook, e.g. calendar sync.
+export function createAgent({ client, business, store, notifyOwner, onBooking = async () => {}, model = DEFAULT_MODEL, now = () => new Date() }) {
   const system = [{ type: "text", text: buildSystemPrompt(business), cache_control: { type: "ephemeral" } }];
 
   async function alertOwner(message) {
@@ -158,14 +158,13 @@ export function createAgent({ client, business, store, notifyOwner, model = DEFA
         if (!check.slots.includes(input.time)) {
           return { ok: false, error: "That time is not available. Offer one of the free slots instead.", ...check };
         }
-        const booking = {
-          id: shortId("B"),
-          status: "booked",
-          phone: ctx.phone,
-          ...input,
-          createdAt: now().toISOString(),
-        };
-        store.addBooking(booking);
+        const booking = { phone: ctx.phone, ...input };
+        booking.id = store.addBooking(booking);
+        try {
+          await onBooking(booking);
+        } catch (err) {
+          console.error("Booking hook failed:", err.message);
+        }
         await alertOwner(
           `New ${business.booking.appointmentName} booked\n` +
             `${check.weekday} ${input.date}, ${input.time}\n` +
@@ -176,7 +175,8 @@ export function createAgent({ client, business, store, notifyOwner, model = DEFA
       }
 
       case "save_lead": {
-        store.addLead({ id: shortId("L"), phone: ctx.phone, ...input, createdAt: now().toISOString() });
+        const { created } = store.addLead({ phone: ctx.phone, ...input });
+        if (!created) return { ok: true, note: "Existing enquiry updated." };
         const details = [input.property_type, input.requirement_details, input.budget, input.timeline]
           .filter(Boolean)
           .join(" · ");
@@ -200,8 +200,9 @@ export function createAgent({ client, business, store, notifyOwner, model = DEFA
     }
   }
 
-  // Returns { reply } to send, or { reply: null, paused: true } while the owner has taken over.
-  async function reply(phone, customerText) {
+  // content: the customer's text, or content blocks (e.g. a photo plus its caption).
+  // Returns { reply, handoff } to send, or { reply: null, paused: true } while the owner has taken over.
+  async function reply(phone, content) {
     const current = now();
     const conversation = store.getConversation(phone);
     if (conversation.pausedUntil > current.getTime()) return { reply: null, paused: true };
@@ -210,7 +211,11 @@ export function createAgent({ client, business, store, notifyOwner, model = DEFA
     const isStale = current.getTime() - conversation.updatedAt > CONVERSATION_RESET_MS;
     const messages = isStale ? [] : [...conversation.messages];
     const clock = describeNow(business, current);
-    messages.push({ role: "user", content: `[${clock.weekday} ${clock.date}, ${clock.time}]\n${customerText}` });
+    const stamp = `[${clock.weekday} ${clock.date}, ${clock.time}]`;
+    messages.push({
+      role: "user",
+      content: typeof content === "string" ? `${stamp}\n${content}` : [{ type: "text", text: stamp }, ...content],
+    });
 
     const ctx = { phone, handoff: false };
     let replyText = null;
@@ -254,7 +259,7 @@ export function createAgent({ client, business, store, notifyOwner, model = DEFA
       updatedAt: current.getTime(),
       pausedUntil: ctx.handoff ? current.getTime() + HANDOFF_PAUSE_MS : 0,
     });
-    return { reply: replyText ?? FALLBACK_REPLY };
+    return { reply: replyText ?? FALLBACK_REPLY, handoff: ctx.handoff };
   }
 
   return { reply };

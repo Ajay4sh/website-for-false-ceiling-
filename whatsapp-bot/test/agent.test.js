@@ -2,7 +2,8 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import { createAgent, DEFAULT_MODEL } from "../src/agent.js";
-import { createStore } from "../src/store.js";
+import { openDb } from "../src/db.js";
+import { createClientStore } from "../src/clientStore.js";
 
 const business = JSON.parse(fs.readFileSync(new URL("../businesses/ceilcraft.json", import.meta.url)));
 const PHONE = "919811112222";
@@ -35,7 +36,9 @@ function setup(responses, startAt = "2026-10-06T05:30:00Z") {
   let clock = new Date(startAt);
   const alerts = [];
   const client = fakeClient(responses);
-  const store = createStore(null);
+  const db = openDb();
+  const clientId = db.createClient({ slug: "ceilcraft", name: business.name, profile: business });
+  const store = createClientStore(db, db.getClient(clientId), () => clock);
   const agent = createAgent({
     client,
     business,
@@ -43,7 +46,7 @@ function setup(responses, startAt = "2026-10-06T05:30:00Z") {
     notifyOwner: async (message) => alerts.push(message),
     now: () => clock,
   });
-  return { agent, client, store, alerts, setClock: (iso) => (clock = new Date(iso)) };
+  return { agent, client, store, db, clientId, alerts, setClock: (iso) => (clock = new Date(iso)) };
 }
 
 const visit = {
@@ -56,7 +59,7 @@ const visit = {
 };
 
 test("checks slots, books the visit, alerts the owner and replies", async () => {
-  const { agent, client, store, alerts } = setup([
+  const { agent, client, store, db, clientId, alerts } = setup([
     toolUse("t1", "check_available_slots", { date: "2026-10-07" }),
     toolUse("t2", "book_appointment", visit),
     say("Aapki site visit *kal 11 baje* book ho gayi hai."),
@@ -65,8 +68,11 @@ test("checks slots, books the visit, alerts the owner and replies", async () => 
   const result = await agent.reply(PHONE, "haan kal 11 baje theek hai");
 
   assert.equal(result.reply, "Aapki site visit *kal 11 baje* book ho gayi hai.");
-  assert.equal(store.bookings.length, 1);
-  assert.equal(store.bookings[0].phone, PHONE);
+  const bookings = db.listBookings(clientId);
+  assert.equal(bookings.length, 1);
+  assert.equal(bookings[0].phone, PHONE);
+  assert.equal(bookings[0].status, "booked");
+  assert.deepEqual(db.countEvents(clientId, 0, Date.now() * 2), { booking_new: 1 });
   assert.equal(alerts.length, 1);
   assert.match(alerts[0], /Wednesday 2026-10-07, 11:00/);
   assert.match(alerts[0], /\+919811112222/);
@@ -85,7 +91,7 @@ test("checks slots, books the visit, alerts the owner and replies", async () => 
 });
 
 test("refuses to book a slot that is already taken", async () => {
-  const { agent, client, store } = setup([
+  const { agent, client, db, clientId } = setup([
     toolUse("t1", "book_appointment", visit),
     toolUse("t2", "book_appointment", visit),
     say("Ye slot available nahi hai."),
@@ -93,13 +99,13 @@ test("refuses to book a slot that is already taken", async () => {
 
   await agent.reply(PHONE, "book karo");
 
-  assert.equal(store.bookings.length, 1);
+  assert.equal(db.listBookings(clientId).length, 1);
   const secondResult = client.requests[2].messages.at(-1).content[0];
   assert.equal(JSON.parse(secondResult.content).ok, false);
 });
 
 test("saves a lead and alerts the owner", async () => {
-  const { agent, store, alerts } = setup([
+  const { agent, db, clientId, alerts } = setup([
     toolUse("t1", "save_lead", {
       customer_name: "",
       area: "Kidwai Nagar",
@@ -114,7 +120,7 @@ test("saves a lead and alerts the owner", async () => {
 
   await agent.reply(PHONE, "kitchen me PVC lagwana hai, Kidwai Nagar");
 
-  assert.equal(store.leads.length, 1);
+  assert.equal(db.listLeads(clientId).length, 1);
   assert.match(alerts[0], /Kidwai Nagar/);
   assert.match(alerts[0], /name not given/);
 });
@@ -150,4 +156,44 @@ test("a refusal sends the fallback reply and hands off", async () => {
 
   assert.match(result.reply, /team aapko jaldi contact karegi/);
   assert.equal(alerts.length, 1);
+});
+
+test("a second save_lead updates the same enquiry without a second alert", async () => {
+  const lead = (extra) => ({
+    customer_name: "",
+    area: "Civil Lines",
+    property_type: "",
+    service_interest: "POP ceiling",
+    requirement_details: "",
+    budget: "",
+    timeline: "",
+    ...extra,
+  });
+  const { agent, db, clientId, alerts } = setup([
+    toolUse("t1", "save_lead", lead()),
+    say("Aapka naam?"),
+    toolUse("t2", "save_lead", lead({ customer_name: "Meena" })),
+    say("Dhanyavaad Meena ji."),
+  ]);
+
+  await agent.reply(PHONE, "POP ceiling chahiye, Civil Lines");
+  await agent.reply(PHONE, "Meena");
+
+  const leads = db.listLeads(clientId);
+  assert.equal(leads.length, 1);
+  assert.equal(leads[0].customer_name, "Meena");
+  assert.equal(leads[0].area, "Civil Lines");
+  assert.equal(alerts.length, 1);
+});
+
+test("a photo is passed to the assistant after the time stamp", async () => {
+  const { agent, client } = setup([say("Achhi photo hai. Room ka size kya hai?")]);
+  const image = { type: "image", source: { type: "base64", media_type: "image/jpeg", data: "AAAA" } };
+
+  await agent.reply(PHONE, [image, { type: "text", text: "aisa design chahiye" }]);
+
+  const content = client.requests[0].messages[0].content;
+  assert.match(content[0].text, /^\[Tuesday 2026-10-06, 11:00\]$/);
+  assert.equal(content[1].type, "image");
+  assert.equal(content[2].text, "aisa design chahiye");
 });

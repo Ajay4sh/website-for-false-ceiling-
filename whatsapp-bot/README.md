@@ -1,88 +1,76 @@
-# WhatsApp booking bot
+# BookBot: AI WhatsApp booking assistant for local businesses
 
-An AI assistant that answers a business's WhatsApp enquiries in Hindi, Hinglish or English. It works 24/7 and:
+BookBot answers a business's WhatsApp enquiries 24/7 in Hindi, Hinglish or English, books appointments, and follows up missed calls. Each business owner gets a dashboard showing their leads, bookings and chats. You run one server for all your clients. ("BookBot" is a placeholder name; set `PRODUCT_NAME` to rename it.)
 
-- answers questions using only the business's own information (services, price ranges, FAQs)
-- collects the enquiry details and sends the owner a lead alert on WhatsApp
-- checks free time slots and books appointments (site visits, demos, consultations)
-- hands the chat to the owner when the customer asks for a person, complains, or needs a custom quote
+## What it does
 
-Each client business is one file in `businesses/`. `businesses/ceilcraft.json` is the first example, a false-ceiling business.
+**For customers (on WhatsApp)**
+- Answers questions from the business's own information: services, price ranges, FAQs, hours.
+- Understands photos, for example a site photo or a design the customer likes.
+- Collects enquiry details and books appointments into free slots.
+- Sends a reminder before the appointment. A customer can reply STOP to opt out of reminders.
+- After a missed call, sends a WhatsApp message asking how it can help.
 
-## 1. Try it in your terminal (no WhatsApp needed)
+**For business owners (dashboard and WhatsApp alerts)**
+- Instant WhatsApp alert for every new lead, booking, missed call and handoff.
+- Leads, with Won/Lost tracking and CSV download.
+- Bookings: mark done, mark no-show or cancel. Bookings also appear in Google Calendar.
+- Chat transcripts, with "pause bot, I'll reply myself".
+- Monthly report, printable as a PDF, showing what the assistant achieved.
+- Self-service editing of business details, hours, services, prices and FAQs.
+- Deletion of a customer's data on request.
 
-You need Node.js 22.9 or newer and a Claude API key from https://platform.claude.com.
+**For you (admin)**
+- Add clients, connect their WhatsApp numbers, templates, calendar and missed-call link.
+- Create owner logins. Each owner sees only their own business.
+- Activity log, automatic data retention, daily backups.
+- A demo client with sample data for sales meetings.
+
+## Quick start on your computer
+
+Needs Node.js 22.13 or newer.
 
 ```bash
 cd whatsapp-bot
 npm install
-cp .env.example .env        # then put your key after ANTHROPIC_API_KEY=
-npm run chat
+cp .env.example .env            # add at least ANTHROPIC_API_KEY
+npm test                        # 52 automated tests, no API key needed
+npm run chat                    # chat with the assistant in the terminal
 ```
 
-Type messages as a customer would, for example `ceiling ka rate kya hai?` or `kal site visit ho sakti hai?`. Owner alerts print in the terminal. Test bookings are saved in `data/<business>-test.json`.
-
-Commands: `/reset` starts a new conversation, `/bookings` and `/leads` show what was saved, `/quit` exits.
-
-## 2. Set up a business
-
-Copy `businesses/ceilcraft.json` and edit it. Fill in every field; the bot only knows what is written here.
-
-| Field | What to put |
-| --- | --- |
-| `name`, `type`, `city`, `areasServed`, `phone`, `address`, `hoursText` | Basic details customers ask about |
-| `ownerWhatsapp` | Owner's WhatsApp number with country code, no `+` (e.g. `919876543210`) |
-| `booking` | Working days (0 = Sunday … 6 = Saturday), hours, slot length, how many bookings per slot, how far ahead, minimum notice |
-| `leadQuestions` | What the bot should find out about each enquiry |
-| `services`, `priceList`, `faqs`, `policies` | What the bot may tell customers. Prices are quoted only as these ranges. |
-
-Then set `BUSINESS_FILE` in `.env` to the new file.
-
-**Before going live, replace the placeholder city, areas, phone and address in `ceilcraft.json` with your real details.**
-
-## 3. Connect WhatsApp
-
-1. Create a Meta developer app with WhatsApp at https://developers.facebook.com and add a phone number. Use a number that is **not** already on the normal WhatsApp app, or check Meta's current "coexistence" option first.
-2. From **WhatsApp > API setup**, copy the access token and phone number ID into `.env` (`WHATSAPP_TOKEN`, `WHATSAPP_PHONE_NUMBER_ID`). Use a permanent system-user token for production; the dashboard's temporary token expires in 24 hours.
-3. Copy the app secret (**App settings > Basic**) into `WHATSAPP_APP_SECRET`, and choose any secret word for `WHATSAPP_VERIFY_TOKEN`.
-4. Deploy the bot (step 4) so it has a public `https://` address.
-5. In **WhatsApp > Configuration**, set the webhook URL to `https://<your-address>/webhook` with your verify word, and subscribe to the `messages` field.
-6. Message the business number from your phone to test.
-
-## 4. Deploy
-
-Run `npm start` on any server with Node.js 22.9+. The bot saves data in `data/`, so use hosting with a **persistent disk**, such as a small cloud VM or a platform with a volume. Hosting that wipes files on every restart will lose bookings.
-
-Check it is running at `https://<your-address>/health`.
-
-## How it works
-
-| File | Job |
-| --- | --- |
-| `src/server.js` | Receives WhatsApp messages from Meta, checks they are genuine, replies |
-| `src/agent.js` | The AI assistant: instructions, tools, conversation memory |
-| `src/slots.js` | Works out free appointment times in Indian time |
-| `src/store.js` | Saves bookings, leads and chats to a JSON file |
-| `src/whatsapp.js` | Sends WhatsApp messages |
-| `src/cli.js` | Terminal chat for testing |
-
-- **Conversations** are remembered for 24 hours of silence, then start fresh.
-- **Handoff:** after a handoff, the bot stays silent in that chat for 12 hours so the owner can take over from their own phone.
-- **Model:** uses `claude-opus-5-5` at low effort by default. Set `CLAUDE_MODEL` in `.env` to change it. If Claude declines a message for safety reasons, the request is retried on a fallback model automatically (`fallbacks: "default"`); if that also declines, the owner is alerted.
-- **Cost:** replies to customers who message first are free on WhatsApp's side within 24 hours. Claude charges per token: check https://platform.claude.com for current prices and measure your real cost per conversation during testing.
-
-## Known limits (next steps)
-
-- **Owner alerts** are normal WhatsApp messages, which Meta only delivers if the owner has messaged the business number in the last 24 hours. For reliable alerts, create an approved utility template and send alerts with it.
-- Voice notes and photos get a polite "please type your message" reply.
-- Bookings are not yet synced to Google Calendar, and there are no automatic reminders.
-- One business per running server. Serving several clients means running one copy each, until multi-client support is added.
-- No missed-call follow-up yet.
-
-## Tests
+To see the dashboard locally, using made-up WhatsApp values:
 
 ```bash
-npm test
+npm run manage -- gen-key       # paste into APP_ENCRYPTION_KEY in .env
+# in .env set PUBLIC_URL=http://localhost:3000 and any text for the three WHATSAPP_ values
+npm run manage -- create-admin you@example.com "Your Name"
+npm run manage -- seed-demo     # optional: demo client with sample data
+npm start                       # open http://localhost:3000
 ```
 
-The tests use a simulated Claude, so they need no API key.
+## Going live
+
+Follow **[docs/setup.md](docs/setup.md)**. It covers renting the server, HTTPS, Meta/WhatsApp, message templates, Google Calendar, missed calls, and onboarding each new client.
+
+| Document | What's in it |
+| --- | --- |
+| [docs/setup.md](docs/setup.md) | Step-by-step deployment and client onboarding |
+| [docs/whatsapp-templates.md](docs/whatsapp-templates.md) | Exact template texts to submit to Meta |
+| [docs/security-privacy.md](docs/security-privacy.md) | Security controls, data handled, India DPDP mapping |
+| [docs/status.md](docs/status.md) | What's built, how it was tested, known limits |
+
+## Code map
+
+| Path | Job |
+| --- | --- |
+| `src/server.js` | Starts everything |
+| `src/app.js` | Web app assembly and security headers |
+| `src/agent.js` | The AI assistant: instructions, tools, memory |
+| `src/webhooks.js` | Incoming WhatsApp messages and missed calls |
+| `src/services.js` | Per-client wiring: WhatsApp sender, alerts, calendar |
+| `src/jobs.js` | Reminders and data retention (every minute) |
+| `src/db.js` | SQLite database and all queries |
+| `src/dashboard/` | Dashboard pages, logins and sessions |
+| `src/manage.js` | Admin commands (`npm run manage`) |
+| `businesses/` | Example business profile |
+| `deploy/` | Docker Compose and HTTPS proxy config |

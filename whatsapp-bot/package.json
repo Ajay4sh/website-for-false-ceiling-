@@ -1,16 +1,17 @@
 {
   "name": "whatsapp-booking-bot",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
-  "description": "Hindi/Hinglish AI assistant that answers WhatsApp enquiries, captures leads and books appointments for a local business.",
+  "description": "Hindi/Hinglish AI assistant for local businesses: answers WhatsApp enquiries, books appointments, follows up missed calls, with a dashboard for owners.",
   "type": "module",
   "engines": {
-    "node": ">=22.9"
+    "node": ">=22.13"
   },
   "scripts": {
-    "start": "node --env-file-if-exists=.env src/server.js",
-    "chat": "node --env-file-if-exists=.env src/cli.js",
-    "test": "node --test"
+    "start": "node --disable-warning=ExperimentalWarning --env-file-if-exists=.env src/server.js",
+    "chat": "node --disable-warning=ExperimentalWarning --env-file-if-exists=.env src/cli.js",
+    "manage": "node --disable-warning=ExperimentalWarning --env-file-if-exists=.env src/manage.js",
+    "test": "node --disable-warning=ExperimentalWarning --test \"test/*.test.js\""
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.131.0",
