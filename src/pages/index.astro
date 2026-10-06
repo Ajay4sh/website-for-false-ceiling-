@@ -1,0 +1,103 @@
+---
+import Base from '../layouts/Base.astro';
+import ServiceCards from '../components/ServiceCards.astro';
+import DesignGallery from '../components/DesignGallery.astro';
+import Calculator from '../components/Calculator.astro';
+import Process from '../components/Process.astro';
+import Reviews from '../components/Reviews.astro';
+import Faq from '../components/Faq.astro';
+import CtaBand from '../components/CtaBand.astro';
+import faqs from '../data/faqs.json';
+import { settings, waHref } from '../lib/site';
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.faqs.map((f) => ({ '@type': 'Question', name: f.question, acceptedAnswer: { '@type': 'Answer', text: f.answer } })),
+};
+---
+<Base
+  title={`False Ceiling Design & Installation in ${settings.city} | ${settings.businessName}`}
+  description={`${settings.businessName}: gypsum, POP, PVC, grid and wooden false ceilings with cove lighting in ${settings.city}. Free site visit and transparent per-sq-ft pricing.`}
+  schema={[faqSchema]}
+>
+  <section class="hero">
+    <div class="container hero__inner">
+      <div>
+        <span class="eyebrow">False ceiling specialists in {settings.city}</span>
+        <h1>{settings.heroTitle}</h1>
+        <p class="lead">{settings.heroText}</p>
+        <div class="hero__cta">
+          <a href="/contact/" class="btn">Book Free Site Visit</a>
+          <a href={waHref()} class="btn btn--ghost" target="_blank" rel="noopener">WhatsApp Us</a>
+        </div>
+        <ul class="highlights">
+          {settings.highlights.map((h) => <li><strong>{h.value}</strong><span>{h.label}</span></li>)}
+        </ul>
+      </div>
+      {settings.heroImage
+        ? <div class="hero__photo"><img src={settings.heroImage} alt={`False ceiling by ${settings.businessName}`} width="800" height="600" fetchpriority="high" /></div>
+        : (
+          <div class="room" aria-hidden="true">
+            <div class="room__ceiling">
+              <div class="room__tier room__tier--1"></div>
+              <div class="room__tier room__tier--2"></div>
+              <div class="room__lights"><i></i><i></i><i></i><i></i></div>
+            </div>
+            <div class="room__wall"></div>
+            <div class="room__floor"></div>
+          </div>
+        )}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <header class="section__head">
+        <span class="eyebrow">What we do</span>
+        <h2>False ceiling services</h2>
+        <p>Every material has its strengths. We help you pick the right one for your room, budget and climate.</p>
+      </header>
+      <ServiceCards />
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="container">
+      <header class="section__head">
+        <span class="eyebrow">Inspiration</span>
+        <h2>Popular ceiling designs</h2>
+        <p>Every design is customised to your room size and lighting plan.</p>
+      </header>
+      <DesignGallery featuredOnly limit={6} />
+      <div class="section__foot"><a href="/designs/" class="btn btn--outline">See all designs</a></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container estimate">
+      <div>
+        <span class="eyebrow">Quick estimate</span>
+        <h2>How much will my false ceiling cost?</h2>
+        <p>Enter your room size and pick a material for a rough budget. The final quote depends on the design, lighting and site conditions, and we confirm it after a free site visit.</p>
+        <p><a href="/cost-calculator/">See all per-sq-ft rates →</a></p>
+      </div>
+      <Calculator />
+    </div>
+  </section>
+
+  <Process />
+  <Reviews />
+
+  <section class="section">
+    <div class="container container--narrow">
+      <header class="section__head">
+        <span class="eyebrow">FAQ</span>
+        <h2>Common questions</h2>
+      </header>
+      <Faq />
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>

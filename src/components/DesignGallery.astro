@@ -1,0 +1,48 @@
+---
+import { getCollection } from 'astro:content';
+import Art from './Art.astro';
+interface Props { featuredOnly?: boolean; limit?: number; showText?: boolean }
+const { featuredOnly = false, limit, showText = false } = Astro.props;
+const designs = (await getCollection('designs'))
+  .filter((d) => !featuredOnly || d.data.featured)
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, limit);
+const cats = [...new Set(designs.map((d) => d.data.category))];
+---
+{cats.length > 1 && (
+  <div class="filters" data-filters>
+    <button class="filter is-active" data-filter="all" aria-pressed="true">All</button>
+    {cats.map((c) => <button class="filter" data-filter={c} aria-pressed="false">{c}</button>)}
+  </div>
+)}
+<div class="gallery">
+  {designs.map((d) => {
+    const meta = [d.data.room, d.data.material, d.data.location].filter(Boolean).join(' · ');
+    return (
+      <figure class="design reveal" data-cat={d.data.category}>
+        <div class="design__media"><Art image={d.data.image} art={d.data.art} alt={`${d.data.title}${meta ? ' – ' + meta : ''}`} /></div>
+        <figcaption>
+          <strong>{d.data.title}</strong>
+          {meta && <span>{meta}</span>}
+          {showText && d.body && <p>{d.body.trim()}</p>}
+        </figcaption>
+      </figure>
+    );
+  })}
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-filters]').forEach((bar) => {
+    const items = bar.nextElementSibling?.querySelectorAll<HTMLElement>('.design') ?? [];
+    bar.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-filter]');
+      if (!btn) return;
+      bar.querySelectorAll('[data-filter]').forEach((b) => {
+        b.classList.toggle('is-active', b === btn);
+        b.setAttribute('aria-pressed', String(b === btn));
+      });
+      const f = btn.dataset.filter;
+      items.forEach((el) => { el.hidden = f !== 'all' && el.dataset.cat !== f; el.classList.add('is-in'); });
+    });
+  });
+</script>

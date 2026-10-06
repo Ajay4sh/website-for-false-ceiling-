@@ -1,0 +1,37 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Process from '../components/Process.astro';
+import Reviews from '../components/Reviews.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { settings } from '../lib/site';
+const crumbs = [{ name: 'About', href: '/about/' }];
+---
+<Base
+  title={`About ${settings.businessName}`}
+  description={`About ${settings.businessName}, false ceiling designers and installers serving ${settings.areasServed.join(', ')}.`}
+  crumbs={crumbs}
+>
+  <PageHero title={`About ${settings.businessName}`} text={settings.tagline} crumbs={crumbs} />
+  <section class="section">
+    <div class="container split">
+      <div>
+        <span class="eyebrow">Who we are</span>
+        <h2>Ceilings done right, the first time</h2>
+        {settings.aboutText.split(/\n+/).map((p) => <p>{p}</p>)}
+        <ul class="highlights" style="margin-top:24px">
+          {settings.highlights.map((h) => <li><strong style="color:var(--gold-dark)">{h.value}</strong><span>{h.label}</span></li>)}
+        </ul>
+      </div>
+      <div class="aside__box">
+        <h3>Areas we serve</h3>
+        <ul class="areas">{settings.areasServed.map((a) => <li>{a}</li>)}</ul>
+        <h3 style="margin-top:24px">Working hours</h3>
+        <p>{settings.hours}</p>
+      </div>
+    </div>
+  </section>
+  <Process />
+  <Reviews />
+  <CtaBand />
+</Base>

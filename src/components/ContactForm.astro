@@ -1,0 +1,52 @@
+---
+import { settings } from '../lib/site';
+---
+<form class="form" data-lead data-wa={settings.whatsapp.replace(/\D/g, '')} data-name={settings.businessName} novalidate>
+  <label>Your name<input type="text" name="name" required autocomplete="name" /></label>
+  <label>Phone number<input type="tel" name="phone" required autocomplete="tel" inputmode="tel" /></label>
+  <div class="row-2">
+    <label>Property type
+      <select name="property">
+        <option>Home / Apartment</option>
+        <option>Villa / Bungalow</option>
+        <option>Office</option>
+        <option>Shop / Showroom</option>
+        <option>Other</option>
+      </select>
+    </label>
+    <label>Approx. area (sq ft)<input type="number" name="area" min="1" inputmode="numeric" /></label>
+  </div>
+  <label>Locality / area<input type="text" name="locality" autocomplete="address-level2" /></label>
+  <label>Message<textarea name="message" rows="3" placeholder="Rooms, preferred material, timeline…"></textarea></label>
+  <p class="form__error" data-error role="alert" hidden></p>
+  <button type="submit" class="btn btn--wa btn--block">Send on WhatsApp</button>
+  <p class="form__hint">Opens WhatsApp with your details filled in. Nothing is stored on this website.</p>
+</form>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('[data-lead]').forEach((form) => {
+    const err = form.querySelector<HTMLElement>('[data-error]')!;
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const d = new FormData(form);
+      const name = String(d.get('name') || '').trim();
+      const phone = String(d.get('phone') || '').trim();
+      if (!name || phone.replace(/\D/g, '').length < 10) {
+        err.textContent = 'Please enter your name and a valid 10-digit phone number.';
+        err.hidden = false;
+        return;
+      }
+      err.hidden = true;
+      const lines = [
+        `Hi ${form.dataset.name}, I'd like a free site visit / quote.`,
+        `Name: ${name}`,
+        `Phone: ${phone}`,
+        `Property: ${d.get('property')}`,
+        d.get('area') && `Area: ${d.get('area')} sq ft`,
+        d.get('locality') && `Locality: ${d.get('locality')}`,
+        d.get('message') && `Message: ${d.get('message')}`,
+      ].filter(Boolean);
+      window.open(`https://wa.me/${form.dataset.wa}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank', 'noopener');
+    });
+  });
+</script>

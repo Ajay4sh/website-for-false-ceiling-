@@ -1,0 +1,29 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Art from '../../components/Art.astro';
+import CtaBand from '../../components/CtaBand.astro';
+const posts = (await getCollection('blog', (p) => !p.data.draft)).sort((a, b) => +b.data.date - +a.data.date);
+const crumbs = [{ name: 'Blog', href: '/blog/' }];
+const fmt = (d: Date) => d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+---
+<Base title="False Ceiling Tips, Costs & Design Ideas" description="Guides on false ceiling materials, costs, lighting and design ideas for homes and offices." crumbs={crumbs}>
+  <PageHero title="Ceiling guides & ideas" text="Practical advice on materials, costs, lighting and design." crumbs={crumbs} />
+  <section class="section">
+    <div class="container posts">
+      {posts.map((p, i) => (
+        <a class="card" href={`/blog/${p.id}/`}>
+          <div class="card__media"><Art image={p.data.image} art={['cove', 'round', 'wood', 'grid', 'baffle', 'pvc'][i % 6]} alt={p.data.title} /></div>
+          <div class="card__body">
+            <div class="post-meta">{fmt(p.data.date)}</div>
+            <h3>{p.data.title}</h3>
+            <p>{p.data.description}</p>
+            <span class="card__more">Read more →</span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+  <CtaBand />
+</Base>

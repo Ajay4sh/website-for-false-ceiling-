@@ -1,0 +1,112 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { settings, waHref, absUrl } from '../lib/site';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string | null;
+  crumbs?: { name: string; href: string }[];
+  schema?: Record<string, unknown>[];
+  type?: 'website' | 'article';
+}
+
+const { title, description, image, crumbs = [], schema = [], type = 'website' } = Astro.props;
+const site = Astro.site;
+const canonical = absUrl(Astro.url.pathname, site);
+const fullTitle = Astro.url.pathname === '/' ? title : `${title} | ${settings.businessName}`;
+const ogImage = image || settings.heroImage;
+
+const business = {
+  '@context': 'https://schema.org',
+  '@type': 'HomeAndConstructionBusiness',
+  '@id': absUrl('/#business', site),
+  name: settings.businessName,
+  description: settings.heroText,
+  url: absUrl('/', site),
+  telephone: settings.phone,
+  email: settings.email,
+  address: { '@type': 'PostalAddress', streetAddress: settings.address, addressLocality: settings.city, addressRegion: settings.state, addressCountry: 'IN' },
+  areaServed: settings.areasServed,
+  openingHours: settings.hours,
+  priceRange: '₹₹',
+  ...(settings.logo ? { logo: absUrl(settings.logo, site) } : {}),
+  ...(ogImage ? { image: absUrl(ogImage, site) } : {}),
+  sameAs: Object.values(settings.social).filter(Boolean),
+};
+
+const breadcrumb = crumbs.length > 0 && {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [{ name: 'Home', href: '/' }, ...crumbs].map((c, i) => ({
+    '@type': 'ListItem', position: i + 1, name: c.name, item: absUrl(c.href, site),
+  })),
+};
+
+const jsonLd = [business, breadcrumb, ...schema].filter(Boolean);
+---
+<!doctype html>
+<html lang="en-IN">
+<head>
+  <meta charset="utf-8" />
+  <script is:inline>document.documentElement.classList.add('js')</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{fullTitle}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <meta name="theme-color" content="#17202b" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="sitemap" href="/sitemap-index.xml" />
+
+  <meta property="og:type" content={type} />
+  <meta property="og:site_name" content={settings.businessName} />
+  <meta property="og:title" content={fullTitle} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:locale" content="en_IN" />
+  {ogImage && <meta property="og:image" content={absUrl(ogImage, site)} />}
+  <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  {jsonLd.map((d) => <script type="application/ld+json" set:html={JSON.stringify(d)} />)}
+</head>
+<body>
+  <a href="#main" class="skip">Skip to content</a>
+  <Header />
+  <main id="main">
+    <slot />
+  </main>
+  <Footer />
+
+  <a href={waHref()} class="wa-float" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+    <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><path fill="currentColor" d="M16 3a13 13 0 0 0-11.2 19.6L3 29l6.6-1.7A13 13 0 1 0 16 3zm0 23.6c-2 0-4-.5-5.7-1.6l-.4-.2-3.9 1 1-3.8-.3-.4A10.6 10.6 0 1 1 16 26.6zm5.8-7.9c-.3-.2-1.9-.9-2.2-1-.3-.1-.5-.2-.7.2l-1 1.2c-.2.2-.4.2-.7.1a8.7 8.7 0 0 1-4.3-3.8c-.3-.6.3-.5.9-1.6.1-.2 0-.4 0-.5l-1-2.4c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5.1 4.5 1.9.8 2.6.9 3.6.7.6-.1 1.9-.8 2.1-1.5.3-.7.3-1.3.2-1.5-.1-.1-.3-.2-.6-.3z"/></svg>
+  </a>
+
+  <script>
+    // Mobile menu
+    const toggle = document.querySelector<HTMLButtonElement>('.nav-toggle');
+    const nav = document.getElementById('nav');
+    toggle?.addEventListener('click', () => {
+      const open = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!open));
+      nav?.classList.toggle('is-open', !open);
+    });
+
+    // Fade sections in as they scroll into view
+    const els = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } });
+      }, { rootMargin: '0px 0px -60px' });
+      els.forEach((el) => io.observe(el));
+    } else {
+      els.forEach((el) => el.classList.add('is-in'));
+    }
+  </script>
+</body>
+</html>

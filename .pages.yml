@@ -1,0 +1,233 @@
+# Admin panel configuration for Pages CMS (https://pagescms.org).
+# Open https://app.pagescms.org, sign in with GitHub and pick this repository.
+# Every section below appears as a form in the admin panel.
+
+media:
+  input: public/images/uploads
+  output: /images/uploads
+  categories: [image]
+
+content:
+  # ------------------------------------------------------------------
+  - name: settings
+    label: Business details & prices
+    description: Name, phone, WhatsApp, address, homepage text and per-sq-ft rates.
+    type: file
+    path: src/data/settings.json
+    format: json
+    fields:
+      - name: businessName
+        label: Business name
+        type: string
+        required: true
+      - name: tagline
+        label: Tagline
+        type: string
+      - name: logo
+        label: Logo (optional, replaces the text logo)
+        type: image
+      - name: siteUrl
+        label: Website address
+        description: Your full domain, e.g. https://www.yourbusiness.in (used for Google and the sitemap).
+        type: string
+        required: true
+      - name: city
+        label: Main city
+        description: Used in page titles for Google, e.g. "Gypsum False Ceiling in Kanpur".
+        type: string
+        required: true
+      - name: state
+        label: State
+        type: string
+      - name: areasServed
+        label: Areas you serve
+        type: string
+        list: true
+      - name: phone
+        label: Phone number (as displayed)
+        type: string
+        required: true
+      - name: whatsapp
+        label: WhatsApp number
+        description: With country code, digits only, e.g. 919876543210
+        type: string
+        required: true
+        pattern:
+          regex: ^\d{10,15}$
+          message: Digits only, including country code (e.g. 919876543210)
+      - name: email
+        label: Email
+        type: string
+      - name: address
+        label: Address
+        type: text
+      - name: hours
+        label: Working hours
+        type: string
+      - name: mapEmbedUrl
+        label: Google Maps embed link (optional)
+        description: In Google Maps, choose Share → Embed a map, and paste only the link inside src="...".
+        type: string
+      - name: heroTitle
+        label: Homepage headline
+        type: string
+      - name: heroText
+        label: Homepage intro text
+        type: text
+      - name: heroImage
+        label: Homepage photo (optional, replaces the illustration)
+        type: image
+      - name: highlights
+        label: Homepage highlights
+        description: Short facts under the headline, e.g. "10+" / "Years experience".
+        type: object
+        list: { max: 4 }
+        fields:
+          - { name: value, label: Big text, type: string }
+          - { name: label, label: Small text, type: string }
+      - name: aboutText
+        label: About us text
+        type: text
+      - name: rates
+        label: Per-sq-ft rates (cost calculator)
+        type: object
+        list: true
+        fields:
+          - { name: material, label: Material, type: string, required: true }
+          - { name: min, label: Minimum ₹ per sq ft, type: number, required: true }
+          - { name: max, label: Maximum ₹ per sq ft, type: number, required: true }
+      - name: coveRatePerFt
+        label: Cove LED lighting ₹ per running ft
+        type: number
+      - name: social
+        label: Social media links
+        type: object
+        fields:
+          - { name: facebook, label: Facebook, type: string }
+          - { name: instagram, label: Instagram, type: string }
+          - { name: youtube, label: YouTube, type: string }
+          - { name: googleBusiness, label: Google Business Profile, type: string }
+
+  # ------------------------------------------------------------------
+  - name: designs
+    label: Designs & projects (gallery)
+    description: Add photos of completed work. Newest ideas or best projects first by "Order".
+    type: collection
+    path: src/content/designs
+    filename: "{fields.title}.md"
+    view:
+      fields: [title, category, room, featured]
+      sort: [order, title]
+    fields:
+      - { name: title, label: Title, type: string, required: true }
+      - name: image
+        label: Photo
+        description: Landscape photo works best. If empty, an illustration is shown.
+        type: image
+      - name: category
+        label: Category
+        type: select
+        default: Home
+        options: { values: [Home, Commercial] }
+      - { name: room, label: Room / space, type: string, description: "e.g. Living room, Office" }
+      - { name: material, label: Material, type: string, description: "e.g. Gypsum, POP + Gypsum" }
+      - { name: location, label: Location (optional), type: string }
+      - name: featured
+        label: Show on homepage
+        type: boolean
+        default: false
+      - { name: order, label: Order (lower shows first), type: number, default: 50 }
+      - name: art
+        label: Illustration (used only when there is no photo)
+        type: select
+        default: cove
+        options: { values: [cove, round, wood, grid, baffle, pvc] }
+      - { name: body, label: Short description, type: text }
+
+  # ------------------------------------------------------------------
+  - name: services
+    label: Services
+    description: One page per service. These pages bring visitors from Google.
+    type: collection
+    path: src/content/services
+    filename: "{fields.title}.md"
+    view:
+      fields: [title, order]
+      sort: [order]
+    fields:
+      - { name: title, label: Service name, type: string, required: true }
+      - { name: summary, label: Short summary (shown on cards), type: text, required: true }
+      - { name: image, label: Main photo, type: image }
+      - { name: priceNote, label: Small tag line on card, type: string }
+      - { name: benefits, label: Key benefits, type: string, list: true }
+      - { name: idealFor, label: Ideal for, type: string, list: true }
+      - { name: order, label: Order (lower shows first), type: number, default: 50 }
+      - name: seoTitle
+        label: Google title (optional)
+        description: The city name is added automatically.
+        type: string
+      - name: seoDescription
+        label: Google description (optional, ~150 characters)
+        type: text
+      - name: art
+        label: Illustration (used only when there is no photo)
+        type: select
+        default: cove
+        options: { values: [cove, round, wood, grid, baffle, pvc] }
+      - { name: body, label: Page content, type: rich-text }
+
+  # ------------------------------------------------------------------
+  - name: reviews
+    label: Customer reviews
+    description: The reviews section appears automatically once you add one. Only add genuine reviews.
+    type: file
+    path: src/data/reviews.json
+    format: json
+    fields:
+      - name: reviews
+        label: Reviews
+        type: object
+        list: true
+        fields:
+          - { name: name, label: Customer name, type: string, required: true }
+          - { name: location, label: Area / project, type: string }
+          - name: rating
+            label: Stars (1–5)
+            type: number
+            default: 5
+            options: { min: 1, max: 5 }
+          - { name: text, label: Review, type: text, required: true }
+
+  # ------------------------------------------------------------------
+  - name: faqs
+    label: FAQs
+    type: file
+    path: src/data/faqs.json
+    format: json
+    fields:
+      - name: faqs
+        label: Questions
+        type: object
+        list: true
+        fields:
+          - { name: question, label: Question, type: string, required: true }
+          - { name: answer, label: Answer, type: text, required: true }
+
+  # ------------------------------------------------------------------
+  - name: blog
+    label: Blog articles
+    description: Helpful articles bring visitors from Google, e.g. "False ceiling cost guide".
+    type: collection
+    path: src/content/blog
+    filename: "{fields.title}.md"
+    view:
+      fields: [title, date, draft]
+      sort: [date]
+      default: { sort: date, order: desc }
+    fields:
+      - { name: title, label: Title, type: string, required: true }
+      - { name: description, label: Summary for Google (~150 characters), type: text, required: true }
+      - { name: date, label: Date, type: date, required: true }
+      - { name: image, label: Cover photo, type: image }
+      - { name: draft, label: Draft (hide from website), type: boolean, default: false }
+      - { name: body, label: Article, type: rich-text }

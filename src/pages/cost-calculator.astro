@@ -1,0 +1,45 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Calculator from '../components/Calculator.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { settings } from '../lib/site';
+const crumbs = [{ name: 'Cost Calculator', href: '/cost-calculator/' }];
+---
+<Base
+  title={`False Ceiling Cost per sq ft in ${settings.city} (Calculator)`}
+  description={`Estimate your false ceiling cost in ${settings.city}. Per-sq-ft rates for gypsum, POP, PVC, grid, metal and wooden ceilings, plus cove lighting.`}
+  crumbs={crumbs}
+>
+  <PageHero title="False ceiling cost calculator" text="Get a quick budget for your room, and see our indicative per-sq-ft rates for every material." crumbs={crumbs} />
+  <section class="section">
+    <div class="container estimate">
+      <div>
+        <h2>Indicative rates</h2>
+        <p>Rates include material and labour for a standard single-level design. Multi-level designs, special finishes and lighting fixtures are extra.</p>
+        <table class="rates">
+          <thead><tr><th>Material</th><th>Rate (per sq ft)</th></tr></thead>
+          <tbody>
+            {settings.rates.map((r) => <tr><td>{r.material}</td><td>₹{r.min} – ₹{r.max}</td></tr>)}
+            <tr><td>Cove LED lighting</td><td>≈ ₹{settings.coveRatePerFt} per running ft</td></tr>
+          </tbody>
+        </table>
+        <p class="note" style="margin-top:16px">Prices vary with design, brand of material, ceiling height and site conditions. Your exact quote is given after a free site visit.</p>
+      </div>
+      <Calculator />
+    </div>
+  </section>
+  <section class="section section--alt">
+    <div class="container container--narrow prose">
+      <h2>What affects the cost of a false ceiling?</h2>
+      <ul>
+        <li><strong>Material:</strong> PVC and grid are the most economical; gypsum and POP are mid-range; wood and metal are premium.</li>
+        <li><strong>Design:</strong> multi-level, curved and cove designs need more framing and labour than a flat ceiling.</li>
+        <li><strong>Lighting:</strong> cove strips, profile lights and spotlights are priced separately.</li>
+        <li><strong>Room height and access:</strong> very high ceilings need scaffolding.</li>
+        <li><strong>Finish:</strong> standard paint vs. textures, wallpaper or special finishes.</li>
+      </ul>
+    </div>
+  </section>
+  <CtaBand />
+</Base>
