@@ -5,23 +5,25 @@ A fast, SEO-friendly website for a false ceiling business, with an **admin panel
 - **Pages:** Home, Services (one page per service), Designs gallery, Cost Calculator, About, Contact, Blog
 - **Built with:** [Astro](https://astro.build) (static site, very fast)
 - **Admin panel:** [Pages CMS](https://pagescms.org) (free; edit through simple forms in your browser)
-- **Hosting:** Netlify or Cloudflare Pages (free)
+- **Hosting:** Vercel (free); Netlify also supported
 
 ---
 
 ## Part 1: Put the website online (one-time setup)
 
-### Step 1. Host it on Netlify (free)
-1. Go to <https://app.netlify.com> and sign up with your **GitHub** account.
-2. Click **Add new site → Import an existing project → GitHub**, then choose this repository.
-3. The settings fill in automatically from `netlify.toml` (build command `npm run build`, publish folder `dist`). Click **Deploy**.
-4. In a minute or two your site is live at an address like `your-site.netlify.app`.
+### Step 1. Host it on Vercel (free)
+1. Go to <https://vercel.com/signup> and sign up with your **GitHub** account (choose the free **Hobby** plan).
+2. Click **Add New… → Project**, find this repository and click **Import**. If it isn't listed, click **Adjust GitHub App Permissions** and give Vercel access to it.
+3. Vercel detects Astro automatically (settings come from `vercel.json`). Click **Deploy**.
+4. In a minute or two your site is live at an address like `your-site.vercel.app`.
 
-Netlify then rebuilds the site automatically every time content changes, including edits from the admin panel.
+Vercel then rebuilds the site automatically every time content changes, including edits from the admin panel.
+
+> Prefer Netlify? It works too: at <https://app.netlify.com> choose **Add new site → Import an existing project**. The settings come from `netlify.toml`. Use only one host.
 
 ### Step 2. Connect your own domain (e.g. `yourbusiness.in`)
 1. Buy a domain from any registrar (GoDaddy, Hostinger, Namecheap, BigRock and others).
-2. In Netlify go to **Domain management → Add a domain** and follow the steps. Netlify gives you free HTTPS.
+2. In Vercel open your project → **Settings → Domains**, add your domain and follow the DNS instructions it shows at your registrar. HTTPS is free and automatic.
 3. In the admin panel, open **Business details & prices** and set **Website address** to your domain, e.g. `https://www.yourbusiness.in`.
 
 ### Step 3. Set up the admin panel
