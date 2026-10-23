@@ -4,8 +4,8 @@ The site is a standard Next.js app: static pages plus one Node.js API route (`/a
 
 ## Vercel (recommended)
 
-1. Import the repository in Vercel and set **Root Directory** to `avyntro`.
-2. Framework preset: Next.js. Build command `npm run build`, output is handled automatically.
+1. Import the repository in Vercel and set **Root Directory** to `avyntro`. This is essential: the repository root holds a different (Astro) site.
+2. Framework and build settings come from `avyntro/vercel.json` (Next.js, `npm ci`, `npm run build`). If the project shows other values under **Settings → Build and Deployment**, such as an Astro preset or `dist` as the output directory, clear the overrides.
 3. Add the environment variables from `.env.example` (Production and Preview):
    - `NEXT_PUBLIC_SITE_URL`: production only. Leave it **unset for Preview** so previews stay `noindex`.
    - `DEMO_DELIVERY` plus the matching webhook or Resend variables.
