@@ -1,0 +1,129 @@
+/*
+ * Avyntro design tokens: the single source of truth for the brand.
+ * Change a value here and every component updates. Tailwind generates
+ * utilities from these (e.g. --color-primary -> bg-primary, text-primary).
+ * Contrast pairs are verified in tests/unit/contrast.test.ts.
+ */
+@theme {
+  /* ---- Brand palette (as supplied) ---- */
+  --color-primary: #3B82F6;
+  --color-secondary: #14B8A6;
+  --color-background-dark: #0B1220;
+  --color-background-secondary: #142B4A;
+  --color-background-light: #F8FAFC;
+  --color-surface: #FFFFFF;
+  --color-text-primary: #111827;
+  --color-text-secondary: #64748B;
+  --color-border: #E2E8F0;
+  --color-highlight: #DBEAFE;
+
+  /* ---- Accessible derivatives (needed for AA contrast; see tests) ---- */
+  --color-primary-strong: #2563EB;   /* buttons, links on light backgrounds */
+  --color-primary-hover: #1D4ED8;
+  --color-primary-on-highlight: #1D4ED8; /* text on --color-highlight */
+  --color-primary-soft: #93C5FD;     /* accents / links on dark backgrounds */
+  --color-secondary-strong: #0F766E; /* teal text on light backgrounds */
+  --color-secondary-soft: #5EEAD4;   /* teal text on dark backgrounds */
+  --color-text-inverse: #FFFFFF;
+  --color-text-on-dark: #E2E8F0;
+  --color-text-on-dark-muted: #94A3B8;
+  --color-border-dark: #24385A;
+  --color-surface-dark: #101B2E;
+
+  /* ---- Status ---- */
+  --color-status-live: #047857;
+  --color-status-live-bg: #D1FAE5;
+  --color-status-planned: #92400E;
+  --color-status-planned-bg: #FEF3C7;
+  --color-status-tba: #475569;
+  --color-status-tba-bg: #E2E8F0;
+  --color-danger: #B91C1C;
+  --color-danger-bg: #FEE2E2;
+  --color-success: #047857;
+  --color-success-bg: #ECFDF5;
+  --color-review: #7C2D12;
+  --color-review-bg: #FFEDD5;
+
+  /* ---- Typography ---- */
+  --font-sans: "Inter Variable", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1rem;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.375rem;
+  --text-base: 1rem;
+  --text-base--line-height: 1.625rem;
+  --text-lg: 1.125rem;
+  --text-lg--line-height: 1.75rem;
+  --text-xl: 1.25rem;
+  --text-xl--line-height: 1.875rem;
+  /* Fluid display sizes: kept moderate so content stays above the fold */
+  --text-display-sm: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
+  --text-display-sm--line-height: 1.2;
+  --text-display-md: clamp(1.875rem, 1.4rem + 1.8vw, 2.625rem);
+  --text-display-md--line-height: 1.15;
+  --text-display-lg: clamp(2.125rem, 1.5rem + 2.6vw, 3.375rem);
+  --text-display-lg--line-height: 1.08;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --tracking-tight: -0.02em;
+  --tracking-eyebrow: 0.08em;
+
+  /* ---- Spacing: Tailwind's 4px base unit (p-1 = 4px, p-2 = 8px ...) ---- */
+  --spacing: 0.25rem;
+  --spacing-section: clamp(4rem, 3rem + 4vw, 7rem);
+  --spacing-gutter: 1rem;
+
+  /* ---- Layout ---- */
+  --container-content: 76rem;
+  --container-prose: 44rem;
+  --container-narrow: 36rem;
+
+  /* ---- Breakpoints ---- */
+  --breakpoint-sm: 40rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 64rem;
+  --breakpoint-xl: 80rem;
+
+  /* ---- Radii ---- */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.25rem;
+  --radius-pill: 999px;
+
+  /* ---- Shadows ---- */
+  --shadow-sm: 0 1px 2px rgb(15 23 42 / 0.06);
+  --shadow-md: 0 4px 12px -2px rgb(15 23 42 / 0.08), 0 2px 4px -2px rgb(15 23 42 / 0.06);
+  --shadow-lg: 0 18px 40px -12px rgb(15 23 42 / 0.18);
+  --shadow-window: 0 30px 60px -20px rgb(2 6 23 / 0.55), 0 0 0 1px rgb(148 163 184 / 0.12);
+
+  /* ---- Motion ---- */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
+}
+
+:root {
+  /* Focus indicator */
+  --focus-ring-color: var(--color-primary-strong);
+  --focus-ring-color-on-dark: var(--color-primary-soft);
+  --focus-ring-width: 3px;
+  --focus-ring-offset: 2px;
+
+  /* Z-index scale */
+  --z-base: 0;
+  --z-raised: 10;
+  --z-dropdown: 40;
+  --z-header: 50;
+  --z-overlay: 60;
+  --z-dialog: 70;
+  --z-skip-link: 100;
+
+  /* Header height (used for scroll offset) */
+  --header-height: 4rem;
+}
